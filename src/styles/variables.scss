@@ -1,0 +1,33 @@
+
+
+$spacer: 1rem;
+
+// color bank
+$color-floral-white: #FFFDF7;
+$color-off-white-blue: #f4f6f9;
+$color-gunmetal: #0b3142;
+$color-deep-chestnut: #bf4342;
+$color-viridian-green: #129490;
+$color-june-bud: #C5D86D;
+
+// application colors
+$color-background: $color-off-white-blue;
+
+$color-cta-text-color: $color-gunmetal;
+
+$color-tab-inactive-bg: $color-floral-white;
+$color-tab-active-bg: $color-viridian-green;
+$color-tab-active-color: $color-floral-white;
+
+$color-content-module-bg: $color-floral-white;
+
+$content-module-box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+
+$app-easing-default: .15s ease-in-out;
+
+$spacer-1: $spacer;
+$spacer-2: $spacer * 2;
+$spacer-3: $spacer * 3;
+$spacer-4: $spacer * 4;
+$spacer-5: $spacer * 5;
+

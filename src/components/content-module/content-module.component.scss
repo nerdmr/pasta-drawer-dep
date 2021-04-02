@@ -1,0 +1,70 @@
+@import '../../styles/fonts.scss';
+@import '../../styles/variables.scss';
+
+$default-br: 3px;
+
+.content-module {
+    &.pre-render {
+        transform: scale(1.1);
+    }
+
+    transition: transform $app-easing-default;
+    background: $color-content-module-bg;
+    box-shadow: $content-module-box-shadow;
+    border-radius: $default-br;
+
+    &__toolbar {
+        display: flex;
+        padding: $spacer-1;
+
+        // reset some button styles
+        button {
+            border: none;
+            cursor: pointer;
+            outline: 0;
+            background: none;
+            color: $color-cta-text-color;
+        }
+    }
+    &__tabs {
+        flex: 1;
+    }
+    &__actions {
+        flex-grow: 0;
+    }
+    &__action {
+        opacity: .4;
+        transition: opacity $app-easing-default;
+        
+        &:focus, &:hover {
+            opacity: 1;
+        }
+    }
+    &__tabs &__tab {
+        cursor: pointer;
+        margin-right: $spacer-1 / 2;
+        padding: $spacer-1 / 2 $spacer-1;
+        height: 100%;
+        font-weight: 600;
+        
+        border-bottom: 3px solid transparent;
+        background-color: $color-tab-inactive-bg;
+
+        &.active, &:hover {
+            border-color: $color-tab-active-bg;
+        }
+
+    }
+    &__content-representations {
+
+    }
+    &__content-representation {
+        display: none;
+
+        padding: $spacer-1;
+
+        &.active {
+            display: block;
+        }
+    }
+}
