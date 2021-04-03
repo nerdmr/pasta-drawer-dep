@@ -6,7 +6,7 @@
   "module": "dist/bundle.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "http-server ./dist -o",
+    "serve": "npm run build && http-server ./dist -o",
     "build": "rollup -c",
     "dev": "rollup -c -w"
   },
@@ -15,6 +15,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
+    "http-server": "^0.12.3",
     "rollup": "^2.44.0",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-node-resolve": "^5.2.0",

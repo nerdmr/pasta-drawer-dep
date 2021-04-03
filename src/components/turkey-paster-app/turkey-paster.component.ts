@@ -8,7 +8,7 @@ export class TurkeyPasterComponent extends HTMLElement {
     private preRenderQueue: ContentModuleConfiguration[] = [];
 
     connectedCallback() {
-        this.innerHTML = `<style>${css.default}</style><h1>Pasta Drawer 🍝</h1><div class="turkey-paster__modules"></div>`;
+        this.innerHTML = `<style>${css.default}</style><h1>Pasta Droorwer 🍝</h1><div class="turkey-paster__modules"></div>`;
         this.modulesElement = this.querySelector('.turkey-paster__modules') as HTMLElement;
 
         while (this.preRenderQueue.length > 0) {

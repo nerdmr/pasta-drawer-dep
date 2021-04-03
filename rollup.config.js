@@ -49,7 +49,7 @@ export default {
     }),
     copy({
       targets: [
-        { src: 'www/index.html', dest: 'dist' }
+        { src: 'static/*', dest: 'dist' }
       ]
     })
   ],
