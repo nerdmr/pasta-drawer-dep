@@ -49,14 +49,9 @@ export default {
     }),
     copy({
       targets: [
-        { src: 'static/*', dest: 'dist' }
+        { src: 'assets/*', dest: 'dist' }
       ]
     })
   ],
   external: Object.keys(globals),
 };
-
-// Other useful plugins you might want to add are:
-// @rollup/plugin-images - import image files into your components
-// @rollup/plugin-json - import JSON files into your components
-// rollup-plugin-terser - minify the Rollup bundle
