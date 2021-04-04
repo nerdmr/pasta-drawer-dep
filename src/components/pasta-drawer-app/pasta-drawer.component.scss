@@ -37,7 +37,26 @@ code {
     font-family: $font-mono;
 }
 
-.turkey-paster__modules {
+header {
+    height: 60px;
+    padding: $spacer-1;
+    display: flex;
+
+    img {
+        flex: 0;
+        height: 100%;
+        margin-right: $spacer-1;
+    }
+
+    h1 {
+        flex: 1;
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;
+    }
+}
+
+.pasta-drawer__modules {
     max-width: 800px;
     margin: 0 auto;
 

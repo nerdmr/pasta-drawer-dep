@@ -1,21 +1,30 @@
 @import '../../styles/fonts.scss';
 @import '../../styles/variables.scss';
 
-$default-br: 3px;
+$default-br: 0;
 
 .content-module {
     &.pre-render {
         transform: scale(1.1);
     }
 
+    display: block;
     transition: transform $app-easing-default;
     background: $color-content-module-bg;
-    box-shadow: $content-module-box-shadow;
+    // box-shadow: $content-module-box-shadow;
+    border: $content-module-border;
     border-radius: $default-br;
+
+    border-color: $content-module-accent;
+    &:focus {
+        outline: 3px solid rgba($content-module-accent, .5);
+
+    }
 
     &__toolbar {
         display: flex;
-        padding: $spacer-1;
+        padding: $spacer-1 / 2;
+        padding-bottom: 0;
 
         // reset some button styles
         button {
@@ -47,11 +56,12 @@ $default-br: 3px;
         height: 100%;
         font-weight: 600;
         
-        border-bottom: 3px solid transparent;
-        background-color: $color-tab-inactive-bg;
+        border: 1px solid transparent;
+        // background-color: $color-tab-inactive-bg;
 
         &.active, &:hover {
-            border-color: $color-tab-active-bg;
+            // border-color: $color-tab-active-bg;
+            border: 1px solid #b9b9b9;
         }
 
     }
@@ -61,7 +71,12 @@ $default-br: 3px;
     &__content-representation {
         display: none;
 
-        padding: $spacer-1;
+        // padding: $spacer-1 / 2;
+        padding: 0;
+        margin: $spacer-1 / 2;
+
+        border: $content-representation-border;
+
 
         &.active {
             display: block;

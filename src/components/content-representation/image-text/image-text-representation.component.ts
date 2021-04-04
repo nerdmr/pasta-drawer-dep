@@ -57,24 +57,26 @@ export class ImageTextRepresentationComponent extends ShadowCssComponentBase imp
     }
 
     private ocr(data: any): Promise<string> {
-        
+        this.loading = true;
         return new Promise<string>((resolve, reject) => {
             const formData  = new FormData();
 
             formData.append('image', new Blob([data]));
           
-            const url = 'http://localhost:5000';
+            const url = process.env.OCR_BASE_PATH;
             const options: RequestInit = {
                 method: 'POST',
                 body: formData
             };
     
-            fetch(url, options)
+            fetch(url!, options)
                 .then(async response => {
                     const text = (await response.json()).text;
+                    this.loading = false;
                     resolve(text);
                 })
                 .catch((err) => {
+                    this.loading = false;
                     reject(err);
                 });
         });

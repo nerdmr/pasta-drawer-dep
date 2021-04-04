@@ -1,5 +1,10 @@
 @import './../../../styles/fonts.scss';
 
+pre {
+    margin: 0;
+    overflow: auto;
+}
+
 .code {
     font-family: $font-mono;
 }

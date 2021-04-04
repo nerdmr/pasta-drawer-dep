@@ -1,8 +1,10 @@
 // import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import replace from '@rollup/plugin-replace';
 import typescript from 'rollup-plugin-typescript2';
 import scss from 'rollup-plugin-scss';
+
 
 import copy from 'rollup-plugin-copy'
 
@@ -14,6 +16,16 @@ const packageJson = require('./package.json');
 const globals = {
   ...packageJson.devDependencies,
 };
+
+
+// let prod = false;
+// if (process.env.BUILD && process.env.BUILD == 'production') {
+//   prod = true;
+// }
+// const url = 'http://localhost:5000';
+// const url = process.env.OCR_BASE_PATH;
+
+console.log(process.env.OCR_BASE_PATH);
 
 export default {
   input: 'src/index.ts',
@@ -34,6 +46,9 @@ export default {
     scss({
       output: false,
       
+    }),
+    replace({
+      'process.env.OCR_BASE_PATH': (process.env.OCR_BASE_PATH) ? `'${process.env.OCR_BASE_PATH}'` : `'http://localhost:4000'`,
     }),
     resolve(),
     commonjs(),

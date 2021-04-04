@@ -11,7 +11,7 @@ $color-viridian-green: #129490;
 $color-june-bud: #C5D86D;
 
 // application colors
-$color-background: $color-off-white-blue;
+$color-background: white;
 
 $color-cta-text-color: $color-gunmetal;
 
@@ -19,9 +19,12 @@ $color-tab-inactive-bg: $color-floral-white;
 $color-tab-active-bg: $color-viridian-green;
 $color-tab-active-color: $color-floral-white;
 
-$color-content-module-bg: $color-floral-white;
+$color-content-module-bg: white;
 
 $content-module-box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+$content-module-border: 1px solid lightgray;
+$content-representation-border: 1px dashed lightgray;
+$content-module-accent: $color-viridian-green;
 
 $app-easing-default: .15s ease-in-out;
 

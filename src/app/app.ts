@@ -1,14 +1,15 @@
 import { container, singleton } from "tsyringe";
-import { TurkeyPasterComponent } from "../components/turkey-paster-app/turkey-paster.component";
+import { PastaDrawerComponent } from "../components/pasta-drawer-app/pasta-drawer.component";
 import { AppPage } from "../model/app-page.interface";
 import { ContentModuleConfiguration } from "../model/content-module-configuration.interface";
 import { AppElementsService } from "../services/app-elements/app-elements.service";
 import { ClipboardValueService } from "../services/clipboard-value/clipboard-value.service";
 import { DatabaseService } from "../services/database/database.service";
 import { ContentModuleConfigurationFactory } from "../services/content-module-factory/content-module.factory";
+import { AppKeyboardListenerService } from "../services/app-keyboard-listener/app-keyboard-listener.service";
 
 @singleton()
-export class TurkeyPaster {
+export class PastaDrawer {
     private activePage!: AppPage;
     private pages!: AppPage[];
 
@@ -20,8 +21,9 @@ export class TurkeyPaster {
         private appElementsService: AppElementsService,
         private databaseService: DatabaseService,
         private clipboardValueService: ClipboardValueService,
+        private appKeyboardListenerService: AppKeyboardListenerService,
     ) {
-        const appComponent: TurkeyPasterComponent = new TurkeyPasterComponent();
+        const appComponent: PastaDrawerComponent = new PastaDrawerComponent();
         document.body.appendChild(appComponent);
 
         this.appElementsService.initialize(appComponent);
@@ -48,7 +50,7 @@ export class TurkeyPaster {
     }
 
     private listenForModuleEvents() {
-        this.appElementsService.turkeyPasterComponent.addEventListener('delete', (ev: any) => {
+        this.appElementsService.pastaDrawerComponent.addEventListener('delete', (ev: any) => {
             this.activePage.modules.splice(this.activePage.modules.indexOf(ev.detail.data), 1);
             this.databaseService.savePages(this.pages);
         });
@@ -68,8 +70,18 @@ export class TurkeyPaster {
         });
     }
 
+    private initKeyboardShortcuts() {
+        document.addEventListener('keydown', (ev: KeyboardEvent) => {
+
+        });
+
+        document.addEventListener('keyup', (ev: KeyboardEvent) => {
+            // up/down always navigate content-module
+        });
+    }
+
     private insertModule(module: ContentModuleConfiguration, insertAtBeginning = false) {
-        this.appElementsService.turkeyPasterComponent.addContentModule(module, insertAtBeginning);
+        this.appElementsService.pastaDrawerComponent.addContentModule(module, insertAtBeginning)?.focus();
         
         this.activePage.modules.unshift(module);
         this.databaseService.savePages(this.pages);
@@ -78,10 +90,10 @@ export class TurkeyPaster {
     private renderPage(page: AppPage) {
         for (let i = 0; i < page.modules.length; i++) {
             const module = page.modules[i];
-            this.appElementsService.turkeyPasterComponent.addContentModule(module);
+            this.appElementsService.pastaDrawerComponent.addContentModule(module);
         }
     }
     
 }
 
-const appInstance = container.resolve(TurkeyPaster);
+const appInstance = container.resolve(PastaDrawer);

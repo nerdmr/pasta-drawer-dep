@@ -15,7 +15,7 @@ export interface DbResult {
 
 @singleton()
 export class DatabaseService {
-    private appPagesKey = 'turkey-paster-pages';
+    private appPagesKey = 'pasta-drawer-pages';
     private dbInitPromise: Promise<void>;
 
     /**
@@ -147,7 +147,7 @@ export class DatabaseService {
         });
     }
 
-    private dbName = 'turkey-paster';
+    private dbName = 'pasta-drawer';
     private tableName = 'pages';
     private db!: IDBDatabase;
 

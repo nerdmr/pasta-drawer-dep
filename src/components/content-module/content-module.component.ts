@@ -8,7 +8,7 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
      *
      */
     constructor(private contentModule: ContentModuleConfiguration) {
-        super(css);
+        super(css, false);
     }
 
     connectedCallback() {
@@ -25,6 +25,7 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
         }
 
         const contentContainer = document.createElement('div');
+        contentContainer.tabIndex = 0;
         contentContainer.className = 'content-module pre-render';
         contentContainer.innerHTML = `
         <div class="content-module__toolbar">

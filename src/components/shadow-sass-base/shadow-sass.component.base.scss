@@ -1,0 +1,34 @@
+
+.component {
+    &__wrapper {
+        position: relative;
+
+        cabinet-loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            display: none;
+            opacity: 0;
+            transition: opacity .15s ease-in-out;
+        }
+        &.display-loader {
+            min-height: 200px;
+        }
+        &.display-loader cabinet-loader {
+            display: block;
+            
+            &+div {
+                display: none;
+            }
+        }
+        &.show-loader cabinet-loader {
+            opacity: 1;
+        }
+    }
+
+    
+
+
+}
+

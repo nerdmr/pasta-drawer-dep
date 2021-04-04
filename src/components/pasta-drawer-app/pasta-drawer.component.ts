@@ -1,15 +1,15 @@
 import { ContentModuleConfiguration } from "../../model/content-module-configuration.interface";
 import { ContentModuleComponent } from "../content-module/content-module.component";
 
-import * as css from './turkey-paster.component.scss';
+import * as css from './pasta-drawer.component.scss';
 
-export class TurkeyPasterComponent extends HTMLElement {
+export class PastaDrawerComponent extends HTMLElement {
     private modulesElement?: HTMLElement;
     private preRenderQueue: ContentModuleConfiguration[] = [];
 
     connectedCallback() {
-        this.innerHTML = `<style>${css.default}</style><h1>Pasta Droorwer 🍝</h1><div class="turkey-paster__modules"></div>`;
-        this.modulesElement = this.querySelector('.turkey-paster__modules') as HTMLElement;
+        this.innerHTML = `<style>${css.default}</style><header><img src="img/192.png"><h1>Pasta Drawer</h1></header><div class="pasta-drawer__modules"></div>`;
+        this.modulesElement = this.querySelector('.pasta-drawer__modules') as HTMLElement;
 
         while (this.preRenderQueue.length > 0) {
             this.addContentModule(this.preRenderQueue.pop()!);
@@ -28,7 +28,7 @@ export class TurkeyPasterComponent extends HTMLElement {
         });
     }
 
-    addContentModule(configuration: ContentModuleConfiguration, insertAtBeginning = false) {
+    addContentModule(configuration: ContentModuleConfiguration, insertAtBeginning = false): HTMLElement {
         const contentModuleComponent: ContentModuleComponent = new ContentModuleComponent(configuration);
 
         if (!this.modulesElement) {
@@ -38,7 +38,7 @@ export class TurkeyPasterComponent extends HTMLElement {
                 this.preRenderQueue.push(configuration);
             }
             
-            return;
+            return contentModuleComponent;
         }
 
         if (insertAtBeginning) {
@@ -46,7 +46,9 @@ export class TurkeyPasterComponent extends HTMLElement {
         } else {
             this.modulesElement.appendChild(contentModuleComponent);
         }
+
+        return contentModuleComponent;
     }
 }
 
-customElements.define('turkey-paster', TurkeyPasterComponent);
+customElements.define('pasta-drawer', PastaDrawerComponent);

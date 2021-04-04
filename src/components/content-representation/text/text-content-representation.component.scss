@@ -1,4 +1,9 @@
+@import './../../../styles/variables.scss';
 @import './../../../styles/fonts.scss';
+
+.component {
+    padding: $spacer-1;
+}
 
 pre {
     font-family: $font-content;
