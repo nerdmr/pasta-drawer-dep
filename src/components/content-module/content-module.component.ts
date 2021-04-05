@@ -123,6 +123,27 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
             }));
     }
 
+    public async copy() {
+        const activeRepresentation: ContentRepresentation = this.component.querySelector('.active .content-representation') as ContentRepresentation;
+        const copyData = await activeRepresentation.copy();
+        navigator.clipboard.writeText(copyData).then();
+
+        // flash copy graphic
+        activeRepresentation.classList.add('copy-overlay');
+        setTimeout(() => {
+            activeRepresentation.classList.add('show');
+
+            setTimeout(() => {
+                activeRepresentation.classList.remove('show');
+
+                setTimeout(() => {
+                    activeRepresentation.classList.remove('copy-overlay');
+                }, 150);
+
+            }, 150); // transition duration in css
+        }, 0);
+    }
+
     public selectNextRepresentation() {
         this.selectRepresenationIndex((this.activeRepresentationIndex === this.contentRepresentations.length - 1) ? 0 : this.activeRepresentationIndex + 1);
     }
@@ -161,9 +182,7 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
             '<span class="material-icons">content_copy</span>',
             actionsContainer,
             async (ev) => {
-                const activeRepresentation: ContentRepresentation = this.component.querySelector('.active .content-representation') as ContentRepresentation;
-                const copyData = await activeRepresentation.copy();
-                navigator.clipboard.writeText(copyData).then();
+                this.copy()
             }
         );
     }

@@ -70,6 +70,7 @@ $default-br: 0;
     }
     &__content-representation {
         display: none;
+        position: relative;
 
         // padding: $spacer-1 / 2;
         padding: 0;
@@ -80,6 +81,35 @@ $default-br: 0;
 
         &.active {
             display: block;
+        }
+
+        // This is the content representation web component
+        .content-representation {
+            &:after {
+                display: none;
+                opacity: 0;
+                transition: opacity .1s linear;
+            }
+
+            &.copy-overlay {
+                &:after {
+                    display: block;
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+    
+                    background: white;
+                }
+            }
+
+            &.copy-overlay.show {
+                &:after {
+                    opacity: 1;
+                }
+            }
         }
     }
 }

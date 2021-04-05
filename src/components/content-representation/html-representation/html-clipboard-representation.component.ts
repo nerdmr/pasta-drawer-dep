@@ -35,7 +35,7 @@ export class HtmlClipboardRepresentation extends ContentRepresentationBase imple
     }
     
     async copy(): Promise<string> {
-        throw new Error('Method not implemented.');
+        return this.data.items.find((item) => item.type === ClipboardItemType.textHtml)?.data;
     }
 
     async canRender(value: ClipboardValue): Promise<boolean> {

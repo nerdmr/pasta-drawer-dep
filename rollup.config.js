@@ -17,16 +17,6 @@ const globals = {
   ...packageJson.devDependencies,
 };
 
-
-// let prod = false;
-// if (process.env.BUILD && process.env.BUILD == 'production') {
-//   prod = true;
-// }
-// const url = 'http://localhost:5000';
-// const url = process.env.OCR_BASE_PATH;
-
-console.log(process.env.OCR_BASE_PATH);
-
 export default {
   input: 'src/index.ts',
   output: [

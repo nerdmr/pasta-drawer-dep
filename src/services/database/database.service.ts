@@ -27,14 +27,11 @@ export class DatabaseService {
 
             // onerror handler signifies that the database didn't open successfully
             request.onerror = (error) => {
-                // console.log('Database failed to open');
                 reject(error);
             };
             
             // onsuccess handler signifies that the database opened successfully
             request.onsuccess = () => {
-                // console.log('Database opened successfully');
-            
                 // Store the opened database object in the db variable. This is used a lot below
                 this.db = request.result;
                 resolve();

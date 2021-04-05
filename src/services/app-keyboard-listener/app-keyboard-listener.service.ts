@@ -85,6 +85,19 @@ export class AppKeyboardListenerService {
                     contentModuleComponent.delete();
                 }
             }
+
+            // Enter
+            if (
+                ev.key === 'Enter' &&
+                this.appElementsService.document.activeElement &&
+                this.appElementsService.document.activeElement.classList.contains('content-module')
+            ) {
+                const contentModuleComponent: ContentModuleComponent = this.findParentMatchingSelector('content-module', this.appElementsService.document.activeElement!) as ContentModuleComponent;
+
+                if (contentModuleComponent) {
+                    contentModuleComponent.copy().then();
+                }
+            }
         });
     }
 

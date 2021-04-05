@@ -29,7 +29,7 @@ export class WebpageRepresentationComponent extends ContentRepresentationBase im
         setTimeout(() => {
             this.loading = false;
             this.component.innerHTML = `test`;
-        }, 20000);
+        }, 1000);
     }
 
     async copy(): Promise<string> {

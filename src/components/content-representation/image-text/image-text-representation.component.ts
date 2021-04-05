@@ -3,6 +3,7 @@ import { ContentModuleConfiguration } from "../../../model/content-module-config
 import { ClipboardValue } from "../../../services/clipboard-value/clipboard-value.service";
 import { ShadowCssComponentBase } from "../../shadow-sass-base/shadow-sass.component.base";
 import { ContentRepresentation } from "../content-representation";
+import { ContentRepresentationBase } from "../content-representation.component.base";
 import * as css from './image-text-representation.component.scss'
 
 const elementName = 'content-representation-image-text';
@@ -15,7 +16,7 @@ const elementName = 'content-representation-image-text';
         },
     }
 ])
-export class ImageTextRepresentationComponent extends ShadowCssComponentBase implements ContentRepresentation {
+export class ImageTextRepresentationComponent extends ContentRepresentationBase implements ContentRepresentation {
     name: string = '🔤 Image Text';
     element: string = elementName;
 
