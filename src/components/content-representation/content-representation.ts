@@ -5,7 +5,8 @@ import { ClipboardValue } from "../../services/clipboard-value/clipboard-value.s
 export interface ContentRepresentation extends HTMLElement {
     name: string;
     element: string;
-    configuration: ContentModuleConfiguration;
+    // configuration: ContentModuleConfiguration;
+    data: ClipboardValue,
     canRender(value: ClipboardValue): Promise<boolean>;
     copy(): Promise<string>;
 }

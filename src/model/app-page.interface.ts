@@ -1,3 +1,4 @@
+import { ClipboardValue } from "../services/clipboard-value/clipboard-value.service";
 import { ContentModuleConfiguration } from "./content-module-configuration.interface";
 
 /**
@@ -6,5 +7,5 @@ import { ContentModuleConfiguration } from "./content-module-configuration.inter
 export interface AppPage {
     id?: number;
     name: string;
-    modules: ContentModuleConfiguration[];
+    modules: ClipboardValue[];
 }

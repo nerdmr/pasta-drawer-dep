@@ -48,7 +48,7 @@ export default {
       
     }),
     replace({
-      'process.env.OCR_BASE_PATH': (process.env.OCR_BASE_PATH) ? `'${process.env.OCR_BASE_PATH}'` : `'http://localhost:4000'`,
+      'process.env.OCR_BASE_PATH': (process.env.OCR_BASE_PATH) ? `'${process.env.OCR_BASE_PATH}'` : `'http://localhost:5000'`,
     }),
     resolve(),
     commonjs(),
@@ -64,7 +64,7 @@ export default {
     }),
     copy({
       targets: [
-        { src: 'assets/*', dest: 'dist' }
+        { src: 'www/*', dest: 'dist' }
       ]
     })
   ],

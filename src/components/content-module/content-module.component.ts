@@ -1,14 +1,20 @@
+import { container } from "tsyringe";
 import { ContentModuleConfiguration } from "../../model/content-module-configuration.interface";
+import { ClipboardValue } from "../../services/clipboard-value/clipboard-value.service";
 import { ContentRepresentation } from "../content-representation/content-representation";
 import { ShadowCssComponentBase } from "../shadow-sass-base/shadow-sass.component.base";
 import * as css from './content-module.component.scss';
 
 export class ContentModuleComponent extends ShadowCssComponentBase {
+    private contentRepresentations: ContentRepresentation[];
+
     /**
      *
      */
-    constructor(private contentModule: ContentModuleConfiguration) {
+    constructor(private data: ClipboardValue) {
         super(css, false);
+
+        this.contentRepresentations = container.resolveAll('ContentRepresentation');
     }
 
     connectedCallback() {
@@ -19,8 +25,8 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
 
     }
 
-    render() {
-        if (!this.contentModule) {
+    async render() {
+        if (!this.data) {
             return;
         }
 
@@ -45,8 +51,18 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
         const tabs = contentContainer.querySelector('.content-module__tabs') as HTMLElement;
         const tabContainers = contentContainer.querySelector('.content-module__content-representations') as HTMLElement;
 
-        for (let i = 0; i < this.contentModule.elements.length; i++) {
-            const type = this.contentModule.elements[i];
+        // render applicable representations
+        const eles: string[] = [];
+
+        for (let i = 0; i < this.contentRepresentations.length; i++) {
+            const contentRepresentation = this.contentRepresentations[i];
+            if (await contentRepresentation.canRender(this.data)) {
+                eles.push(contentRepresentation.element);
+            }
+        }
+        
+        for (let i = 0; i < eles.length; i++) {
+            const type = eles[i];
             
             const btn = document.createElement('button');
             btn.className = 'content-module__tab';
@@ -63,7 +79,7 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
             const body = document.createElement('div');
             body.className = 'content-module__content-representation';
 
-            const contentRepresentation = this.getElementForType(type, this.contentModule);
+            const contentRepresentation = this.getElementForType(type, this.data);
             btn.innerHTML = contentRepresentation.name;
             body.appendChild(contentRepresentation);
             tabs.appendChild(btn);
@@ -95,7 +111,7 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
                     {
                         detail: {
                             element: this,
-                            data: this.contentModule
+                            data: this.data
                         },
                         bubbles: true,
                         composed: true
@@ -123,9 +139,9 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
         container.prepend(btn);
     }
 
-    private getElementForType(type: string, configuration: ContentModuleConfiguration): ContentRepresentation {
+    private getElementForType(type: string, data: ClipboardValue): ContentRepresentation {
         const ele = document.createElement(type) as ContentRepresentation;
-        ele.configuration = configuration;
+        ele.data = data;
         ele.classList.add('content-representation');
         return ele;
     }

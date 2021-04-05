@@ -1,11 +1,12 @@
 import { ContentModuleConfiguration } from "../../model/content-module-configuration.interface";
+import { ClipboardValue } from "../../services/clipboard-value/clipboard-value.service";
 import { ContentModuleComponent } from "../content-module/content-module.component";
 
 import * as css from './pasta-drawer.component.scss';
 
 export class PastaDrawerComponent extends HTMLElement {
     private modulesElement?: HTMLElement;
-    private preRenderQueue: ContentModuleConfiguration[] = [];
+    private preRenderQueue: ClipboardValue[] = [];
 
     connectedCallback() {
         this.innerHTML = `<style>${css.default}</style><header><img src="img/192.png"><h1>Pasta Drawer</h1></header><div class="pasta-drawer__modules"></div>`;
@@ -28,14 +29,14 @@ export class PastaDrawerComponent extends HTMLElement {
         });
     }
 
-    addContentModule(configuration: ContentModuleConfiguration, insertAtBeginning = false): HTMLElement {
-        const contentModuleComponent: ContentModuleComponent = new ContentModuleComponent(configuration);
+    addContentModule(item: ClipboardValue, insertAtBeginning = false): HTMLElement {
+        const contentModuleComponent: ContentModuleComponent = new ContentModuleComponent(item);
 
         if (!this.modulesElement) {
             if (insertAtBeginning) {
-                this.preRenderQueue.unshift(configuration);
+                this.preRenderQueue.unshift(item);
             } else {
-                this.preRenderQueue.push(configuration);
+                this.preRenderQueue.push(item);
             }
             
             return contentModuleComponent;

@@ -19,12 +19,13 @@ export class ImageContentRepresentationComponent extends ShadowCssComponentBase 
     name: string = '📷 Image';
     element: string = elementName;
 
-    constructor(public configuration: ContentModuleConfiguration) {
+    constructor(public data: ClipboardValue) {
         super(css);
     }
 
     connectedCallback() {
-        const imageData = this.getBase64DataFromBlob(this.configuration.raw as any).then((value) => {
+        const rawData = this.data.items.find((item) => item.kind === 'file')?.data;
+        this.getBase64DataFromBlob(rawData as any).then((value) => {
             this.component.innerHTML = `<img src="${value}">`;
         });
     }
@@ -34,7 +35,12 @@ export class ImageContentRepresentationComponent extends ShadowCssComponentBase 
     }
 
     async canRender(value: ClipboardValue): Promise<boolean> {
-        if (value.type == 'image') {
+        
+        // TODO this assumes that all files are images. better yet, we should look at the data itself if possible efficiently. otherwise need to abstract
+        // the clipboard data value parsing
+        console.log('value', value);
+
+        if (value.type == 'file') {
             return true;
         }
 

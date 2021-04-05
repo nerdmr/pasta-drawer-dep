@@ -1,6 +1,5 @@
 import { registry } from "tsyringe";
-import { ContentModuleConfiguration } from "../../../model/content-module-configuration.interface";
-import { ClipboardValue } from "../../../services/clipboard-value/clipboard-value.service";
+import { ClipboardItemType, ClipboardValue } from "../../../services/clipboard-value/clipboard-value.service";
 import { ShadowCssComponentBase } from "../../shadow-sass-base/shadow-sass.component.base";
 import { ContentRepresentation } from "../content-representation";
 import * as css from './text-content-representation.component.scss';
@@ -22,16 +21,16 @@ export class TextContentRepresentationComponent extends ShadowCssComponentBase i
     /**
      *
      */
-    constructor(public configuration: ContentModuleConfiguration) {
+    constructor(public data: ClipboardValue) {
         super(css);
     }
     
     async copy(): Promise<string> {
-        return this.configuration.raw;
+        return this.data.items.find((item) => item.type === ClipboardItemType.textPlain)?.data;
     }
 
     connectedCallback() {
-        this.component.innerHTML = `<pre>${this.configuration.raw}</pre>`;
+        this.component.innerHTML = `<pre>${this.data.items.find((item) => item.type === ClipboardItemType.textPlain)?.data}</pre>`;
     }
 
     async canRender(value: ClipboardValue): Promise<boolean> {

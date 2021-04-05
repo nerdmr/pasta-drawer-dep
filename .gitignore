@@ -1,3 +1,7 @@
+
+// Internal/local only files
+*.internal.*
+
 # Logs
 logs
 *.log

@@ -21,12 +21,12 @@ export class ImageTextRepresentationComponent extends ShadowCssComponentBase imp
 
     private ocrText = '';
 
-    constructor(public configuration: ContentModuleConfiguration) {
+    constructor(public data: ClipboardValue) {
         super(css);
     }
 
     connectedCallback() {
-        this.getArrayBufferFromBlob(this.configuration.raw as any).then(async (value) => {
+        this.getArrayBufferFromBlob(this.data.items.find(item => item.kind === 'file')?.data).then(async (value) => {
             this.ocrText = await this.ocr(value);
             this.component.innerHTML = `<pre>${this.htmlEncode(this.ocrText)}</pre>`;
         });
@@ -37,7 +37,7 @@ export class ImageTextRepresentationComponent extends ShadowCssComponentBase imp
     }
 
     async canRender(value: ClipboardValue): Promise<boolean> {
-        if (value.type == 'image') {
+        if (value.type == 'file') {
             return true;
         }
 

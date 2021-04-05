@@ -1,6 +1,6 @@
 import { container, registry } from "tsyringe";
 import { ContentModuleConfiguration } from "../../../model/content-module-configuration.interface";
-import { ClipboardValue } from "../../../services/clipboard-value/clipboard-value.service";
+import { ClipboardItemKind, ClipboardItemType, ClipboardValue } from "../../../services/clipboard-value/clipboard-value.service";
 import { ShadowCssComponentBase } from "../../shadow-sass-base/shadow-sass.component.base";
 import { ContentRepresentation } from "../content-representation";
 import * as css from './json-content-representation.component.scss'
@@ -19,7 +19,7 @@ export class JsonContentRepresentationComponent extends ShadowCssComponentBase i
     name: string = '🦋 Pretty';
     element: string = elementName;
 
-    constructor(public configuration: ContentModuleConfiguration) {
+    constructor(public data: ClipboardValue) {
         super(css);
     }
 
@@ -28,12 +28,22 @@ export class JsonContentRepresentationComponent extends ShadowCssComponentBase i
     }
 
     connectedCallback() {
-        this.component.innerHTML = `<pre class="code">${JSON.stringify(JSON.parse(this.configuration.raw), null, 2)}</pre>`;
+        this.component.innerHTML = `<pre class="code">${JSON.stringify(JSON.parse(this.data.items.find((item) => item.type === ClipboardItemType.textPlain)?.data), null, 2)}</pre>`;
     }
 
     async canRender(value: ClipboardValue): Promise<boolean> {
+        if (value.type !== 'text') {
+            return false;
+        }
+
+        const plainTextValue = value.items.find((item) => item.type === ClipboardItemType.textPlain);
+
+        if (!plainTextValue) {
+            return false;
+        }
+
         try {
-            JSON.parse(value.data);
+            JSON.parse(plainTextValue.data);
         } catch (e) {
             return false;
         }
