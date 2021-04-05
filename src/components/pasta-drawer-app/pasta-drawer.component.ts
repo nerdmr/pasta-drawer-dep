@@ -9,7 +9,11 @@ export class PastaDrawerComponent extends HTMLElement {
     private preRenderQueue: ClipboardValue[] = [];
 
     connectedCallback() {
-        this.innerHTML = `<style>${css.default}</style><header><img src="img/192.png"><h1>Pasta Drawer</h1></header><div class="pasta-drawer__modules"></div>`;
+        this.innerHTML = `<style>${css.default}</style>
+        <header>
+            <div class="logo"><img src="img/192.png"><h1>Pasta Drawer</h1></div>
+            <textarea id="mobile-dropzone" class="dropzone"></textarea>
+        </header><div class="pasta-drawer__modules"></div>`;
         this.modulesElement = this.querySelector('.pasta-drawer__modules') as HTMLElement;
 
         while (this.preRenderQueue.length > 0) {
@@ -26,6 +30,14 @@ export class PastaDrawerComponent extends HTMLElement {
                     break;
                 }
             }
+        });
+
+        // wire up the mobile dropzone
+        const mobileDropzone = this.querySelector('#mobile-dropzone') as HTMLTextAreaElement;
+        mobileDropzone.addEventListener('paste', (e) => {
+            setTimeout(() => {
+                mobileDropzone.value = '';
+            }, 0);
         });
     }
 

@@ -54,6 +54,18 @@ header {
         display: flex;
         align-items: center;
     }
+
+    .logo {
+        flex: 0;
+        display: flex;
+    }
+
+    .dropzone {
+        flex: 1;
+        opacity: 0;
+        border: 0;
+        cursor: default;
+    }
 }
 
 .pasta-drawer__modules {
