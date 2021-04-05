@@ -5,8 +5,16 @@ import { ContentRepresentation } from "../content-representation/content-represe
 import { ShadowCssComponentBase } from "../shadow-sass-base/shadow-sass.component.base";
 import * as css from './content-module.component.scss';
 
+interface Represenation {
+    button: HTMLElement;
+    body: HTMLElement;
+    representationElement: ContentRepresentation;
+}
+
 export class ContentModuleComponent extends ShadowCssComponentBase {
-    private contentRepresentations: ContentRepresentation[];
+    private contentRepresentationComponents: ContentRepresentation[];
+    private contentRepresentations: Represenation[] = [];
+    private activeRepresentationIndex: number = -1;
 
     /**
      *
@@ -14,7 +22,7 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
     constructor(private data: ClipboardValue) {
         super(css, false);
 
-        this.contentRepresentations = container.resolveAll('ContentRepresentation');
+        this.contentRepresentationComponents = container.resolveAll('ContentRepresentation');
     }
 
     connectedCallback() {
@@ -54,8 +62,8 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
         // render applicable representations
         const eles: string[] = [];
 
-        for (let i = 0; i < this.contentRepresentations.length; i++) {
-            const contentRepresentation = this.contentRepresentations[i];
+        for (let i = 0; i < this.contentRepresentationComponents.length; i++) {
+            const contentRepresentation = this.contentRepresentationComponents[i];
             if (await contentRepresentation.canRender(this.data)) {
                 eles.push(contentRepresentation.element);
             }
@@ -67,29 +75,31 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
             const btn = document.createElement('button');
             btn.className = 'content-module__tab';
 
-            btn.addEventListener('click', (ev) => {
-                this.component.querySelectorAll('.active').forEach((ele) => {
-                    ele.classList.remove('active');
-                });
-
-                btn.classList.add('active');
-                body.classList.add('active');
-            });
-
             const body = document.createElement('div');
             body.className = 'content-module__content-representation';
 
-            const contentRepresentation = this.getElementForType(type, this.data);
-            btn.innerHTML = contentRepresentation.name;
-            body.appendChild(contentRepresentation);
+            const represenationElement = this.getElementForType(type, this.data);
+            btn.innerHTML = represenationElement.name;
+            body.appendChild(represenationElement);
             tabs.appendChild(btn);
 
-            if (i == 0) {
-                btn.classList.add('active');
-                body.classList.add('active');
-            }
-
             tabContainers.appendChild(body);
+
+            const contentRepresentation: Represenation = {
+                button: btn,
+                body: body,
+                representationElement: represenationElement,
+            };
+
+            this.contentRepresentations.push(contentRepresentation);
+
+            btn.addEventListener('click', (ev) => {
+                this.selectRepresenation(contentRepresentation);
+            });
+
+            if (i == 0) {
+                this.selectRepresenation(contentRepresentation);
+            }
         }
 
         setTimeout(() => {
@@ -99,23 +109,50 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
         this.component.appendChild(contentContainer);
     }
 
+    public delete() {
+        // emit delete
+        this.component.dispatchEvent(new CustomEvent(
+            'delete',
+            {
+                detail: {
+                    element: this,
+                    data: this.data
+                },
+                bubbles: true,
+                composed: true
+            }));
+    }
+
+    public selectNextRepresentation() {
+        this.selectRepresenationIndex((this.activeRepresentationIndex === this.contentRepresentations.length - 1) ? 0 : this.activeRepresentationIndex + 1);
+    }
+
+    public selectPreviousRepresentation() {
+        this.selectRepresenationIndex((this.activeRepresentationIndex === 0) ? this.contentRepresentations.length - 1 : this.activeRepresentationIndex - 1);
+    }
+
+    private selectRepresenation(representation: Represenation) {
+        this.component.querySelectorAll('.active').forEach((ele) => {
+            ele.classList.remove('active');
+        });
+
+        representation.button.classList.add('active');
+        representation.body.classList.add('active');
+
+        this.activeRepresentationIndex = this.contentRepresentations.indexOf(representation);
+    }
+
+    private selectRepresenationIndex(representationIndex: number) {
+        this.selectRepresenation(this.contentRepresentations[representationIndex]);
+    }
+
     private initActions(actionsContainer: HTMLElement) {
         this.addAction(
             'delete',
             '<span class="material-icons">delete</span>',
             actionsContainer,
             (ev) => {
-                // emit delete
-                actionsContainer.dispatchEvent(new CustomEvent(
-                    'delete',
-                    {
-                        detail: {
-                            element: this,
-                            data: this.data
-                        },
-                        bubbles: true,
-                        composed: true
-                    }));
+                this.delete();
             }
         );
 

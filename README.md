@@ -9,14 +9,18 @@
 - Docker
 - PWA
 
-## Representation code template
+## Creating a new template
+
+
+
+### Representation template
 
 ```
 import { registry } from 'tsyringe';
 import { ClipboardValue } from '../../../services/clipboard-value/clipboard-value.service';
-import { ShadowCssComponentBase } from '../../shadow-sass-base/shadow-sass.component.base';
 import { ContentRepresentation } from '../content-representation';
-import * as css from './CHANGE_ME.component.scss'
+import { ContentRepresentationBase } from '../content-representation.component.base';
+import * as css from './CHANGE_ME.component.scss';
 
 const elementName = 'CHANGE_ME_ELEMENT_NAME';
 
@@ -28,7 +32,7 @@ const elementName = 'CHANGE_ME_ELEMENT_NAME';
         },
     }
 ])
-export class CHANGE_ME_Component extends ShadowCssComponentBase implements ContentRepresentation {
+export class CHANGE_ME_Component extends ContentRepresentationBase implements ContentRepresentation {
     name: string = 'NAME';  // Tab value
     element: string = elementName;
 

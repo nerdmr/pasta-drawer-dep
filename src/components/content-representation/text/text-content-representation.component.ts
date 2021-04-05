@@ -15,7 +15,7 @@ const elementName = 'content-representation-raw';
     }
 ])
 export class TextContentRepresentationComponent extends ShadowCssComponentBase implements ContentRepresentation {
-    public name: string = 'Raw';
+    public name: string = 'Plain text';
     public element: string = elementName;
 
     /**

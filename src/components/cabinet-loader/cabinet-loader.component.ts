@@ -2,6 +2,8 @@ import * as css from './cabinet-loader.component.scss';
 
 export class CabinetLoaderComponent extends HTMLElement {
     private component: HTMLElement;
+    private cabinetElement: HTMLElement | null = null;
+    private loading: boolean = false;
 
     /**
      *
@@ -12,32 +14,37 @@ export class CabinetLoaderComponent extends HTMLElement {
 
         this.innerHTML = `<style>${css.default}</style><div class="component"></div>`;
         this.component = this.querySelector('.component') as HTMLDivElement;
-
-        // setTimeout(() => {
-        //     this.showLoader();
-        // }, 500);
-
-        // setTimeout(() => {
-        //     this.hideLoader();
-        // }, 3000);
     }
 
     connectedCallback() {
         this.render();
+        this.cabinetElement = this.component.querySelector('.cabinet');
     }
 
     startAnimation() {
-        this.querySelector('.cabinet')?.classList.add('animate');
+        this.loading = true;
+        
+        if (!this.cabinetElement) {
+            return;
+        }
+
+        this.component.querySelector('.cabinet')?.classList.add('animate');
     }
 
     stopAnimation() {
-        this.querySelector('.cabinet')?.classList.remove('animate');
+        this.loading = false;
+
+        if (!this.cabinetElement) {
+            return;
+        }
+
+        this.component.querySelector('.cabinet')?.classList.remove('animate');
     }
 
     render() {
         this.component.innerHTML = `
         <div class="container">
-            <div class="loader cabinet">
+            <div class="loader cabinet ${(this.loading) ? 'animate' : ''}">
                 <div class="cabinet-drawer">
                     <div class="cabinet-drawer__bottom"></div>
                     <div class="cabinet-drawer__back"></div>

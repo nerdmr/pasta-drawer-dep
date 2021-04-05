@@ -62,6 +62,7 @@ export class ShadowCssComponentBase extends HTMLElement {
         setTimeout(() => {
             this.loaderElement.stopAnimation();
             this.componentWrapper.classList.remove('display-loader');
+            this.loaderElement.stopAnimation();
         }, 150); // transition duration
     }
 }
