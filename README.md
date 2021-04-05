@@ -64,4 +64,12 @@ Mobile users can find a dropzone in the region to the right of the header. Long 
 
 You can always recover this help text by clicking the logo.
 
+Some handy features include:
+
+- Pretty-print JSON
+- Extract text from images (yep, paste an image to the page)
+- Plain and formatted text view
+- Persists using your browser's IndexedDB
+- PWA enabled
+
 Happy pasting!
