@@ -13,7 +13,7 @@ import { ImageTextRepresentationComponent } from "./components/content-represent
 import { JsonContentRepresentationComponent } from "./components/content-representation/json/json-content-representation.component";
 import { TextContentRepresentationComponent } from "./components/content-representation/text/text-content-representation.component";
 import { PastaDrawerComponent } from "./components/pasta-drawer-app/pasta-drawer.component";
-// import { WebpageRepresentationComponent } from "./components/content-representation/webpage/webpage-representation.component";
+import { WebpageRepresentationComponent } from "./components/content-representation/webpage/webpage-representation.component";
 
 HtmlClipboardRepresentation;
 CabinetLoaderComponent;
@@ -22,6 +22,5 @@ TextContentRepresentationComponent;
 JsonContentRepresentationComponent;
 ImageContentRepresentationComponent;
 ImageTextRepresentationComponent;
-
-// WebpageRepresentationComponent; // WIP
+WebpageRepresentationComponent; // WIP
 

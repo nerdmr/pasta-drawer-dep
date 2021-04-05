@@ -28,8 +28,8 @@ export class WebpageRepresentationComponent extends ContentRepresentationBase im
         this.loading = true;
         setTimeout(() => {
             this.loading = false;
-            this.component.innerHTML = `test`;
-        }, 1000);
+            this.component.innerHTML = `<p>Web link representation not yet enabled, but might be soone.</p>`;
+        }, 3000);
     }
 
     async copy(): Promise<string> {
