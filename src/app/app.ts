@@ -59,11 +59,8 @@ export class PastaDrawer {
             if (!event.clipboardData) {
                 return;
             }
-            console.log('clipboard', event.clipboardData.items[1]);
+            
             const clipboardValue = await this.clipboardValueService.getClipboardValue(event.clipboardData);
-            console.log('clipboard value', clipboardValue);
-
-            // const contentModuleConfiguration = await this.contentModuleConfigurationFactory.create(clipboardValue);
         
             this.insertModule(clipboardValue, true);
         });

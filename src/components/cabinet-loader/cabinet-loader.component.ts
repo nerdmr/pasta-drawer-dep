@@ -1,4 +1,3 @@
-import { ShadowCssComponentBase } from "../shadow-sass-base/shadow-sass.component.base";
 import * as css from './cabinet-loader.component.scss';
 
 export class CabinetLoaderComponent extends HTMLElement {

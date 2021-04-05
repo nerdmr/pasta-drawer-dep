@@ -1,22 +1,9 @@
 
-
-## Technology keywords
-
-- TypeScript
-- Rollup
-- Web Components
-- IndexedDB API
-- Docker
-- PWA
-
-## Representation code template
-
-```
 import { registry } from 'tsyringe';
 import { ClipboardValue } from '../../../services/clipboard-value/clipboard-value.service';
 import { ShadowCssComponentBase } from '../../shadow-sass-base/shadow-sass.component.base';
 import { ContentRepresentation } from '../content-representation';
-import * as css from './CHANGE_ME.component.scss'
+import * as css from './image-text-representation.component.scss'
 
 const elementName = 'CHANGE_ME_ELEMENT_NAME';
 
@@ -50,4 +37,3 @@ export class CHANGE_ME_Component extends ShadowCssComponentBase implements Conte
 }
 
 customElements.define(elementName, CHANGE_ME_Component);
-```

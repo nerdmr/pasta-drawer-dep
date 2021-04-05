@@ -38,8 +38,6 @@ export class ImageContentRepresentationComponent extends ShadowCssComponentBase 
         
         // TODO this assumes that all files are images. better yet, we should look at the data itself if possible efficiently. otherwise need to abstract
         // the clipboard data value parsing
-        console.log('value', value);
-
         if (value.type == 'file') {
             return true;
         }

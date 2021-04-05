@@ -13,8 +13,6 @@ export class ShadowCssComponentBase extends HTMLElement {
             this._loading = value;
             this.hideLoader();
         }
-
-        
     }
     protected get loading(): boolean {
         return this._loading;
