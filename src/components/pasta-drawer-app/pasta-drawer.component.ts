@@ -6,9 +6,17 @@ import { ContentModuleComponent } from "../content-module/content-module.compone
 
 import * as css from './pasta-drawer.component.scss';
 
+interface ContentModuleElements {
+    component: HTMLElement;
+    contentModuleElement: HTMLElement;
+}
+
 export class PastaDrawerComponent extends HTMLElement {
     private modulesElement?: HTMLElement;
     private preRenderQueue: ClipboardValue[] = [];
+    private contentModuleElements: ContentModuleElements[] = [];
+
+    private loadedHandler!: () => void;
 
     connectedCallback() {
         this.innerHTML = `<style>${css.default}</style>
@@ -23,12 +31,14 @@ export class PastaDrawerComponent extends HTMLElement {
         }
 
         this.addEventListener('delete', (ev: any) => {
-            const moduleComponents = this.querySelectorAll('content-module') as NodeListOf<ContentModuleComponent>;
+            // const moduleComponents = this.querySelectorAll('content-module') as NodeListOf<ContentModuleComponent>;
 
-            for (let i = 0; i < moduleComponents.length; i++) {
-                const module = moduleComponents[i];
-                if (module == ev.detail.element) {
-                    module.parentNode?.removeChild(module);
+            for (let i = 0; i < this.contentModuleElements.length; i++) {
+                const module = this.contentModuleElements[i];
+                if (module.component == ev.detail.element) {
+                    this.selectNextContentModule();
+                    module.component.parentNode?.removeChild(module.component);
+                    this.contentModuleElements.splice(i, 1);
                     break;
                 }
             }
@@ -41,6 +51,10 @@ export class PastaDrawerComponent extends HTMLElement {
                 mobileDropzone.value = '';
             }, 0);
         });
+
+        this.loadedHandler = () => {
+            this.selectClosestContentModule(0);
+        };
     }
 
     addContentModule(item: ClipboardValue, insertAtBeginning = false): HTMLElement {
@@ -58,11 +72,92 @@ export class PastaDrawerComponent extends HTMLElement {
 
         if (insertAtBeginning) {
             this.modulesElement.prepend(contentModuleComponent);
+            setTimeout(() => {
+                this.contentModuleElements.unshift({
+                    component: contentModuleComponent,
+                    contentModuleElement: contentModuleComponent.querySelector('.content-module')!
+                });
+
+                if (this.modulesElement?.childElementCount === this.contentModuleElements.length) {
+                    this.loadedHandler();
+                }
+            }, 0);
         } else {
             this.modulesElement.appendChild(contentModuleComponent);
+            setTimeout(() => {
+                this.contentModuleElements.push({
+                    component: contentModuleComponent,
+                    contentModuleElement: contentModuleComponent.querySelector('.content-module')!
+                });
+
+                if (this.modulesElement?.childElementCount === this.contentModuleElements.length) {
+                    this.loadedHandler();
+                }
+            }, 0);
         }
 
         return contentModuleComponent;
+    }
+
+    public selectNextContentModule() {
+        const currentActiveModule = this.contentModuleElements.find(item => item.contentModuleElement === this.ownerDocument.activeElement);
+        if (currentActiveModule != null) {
+            // let's choose the next one
+            const selectedIndex = this.contentModuleElements.indexOf(currentActiveModule);
+            this.contentModuleElements[(selectedIndex === this.contentModuleElements.length - 1) ? 0 : selectedIndex + 1].contentModuleElement.focus();
+            return;
+        }
+
+        this.selectClosestContentModule(0);
+    }
+
+    public selectPreviousContentModule() {
+        const currentActiveModule = this.contentModuleElements.find(item => item.contentModuleElement === this.ownerDocument.activeElement);
+        if (currentActiveModule != null) {
+            // let's choose the next one
+            const selectedIndex = this.contentModuleElements.indexOf(currentActiveModule);
+            this.contentModuleElements[(selectedIndex === 0) ? this.contentModuleElements.length - 1 : selectedIndex - 1].contentModuleElement.focus();
+            return;
+        }
+
+        this.selectClosestContentModule(this.contentModuleElements.length - 1);
+    }
+
+    public selectClosestContentModule(indexOnFail: number) {
+        const matchingParent: HTMLElement|null = this.findParentMatchingSelector('.content-module', this.ownerDocument.activeElement!) as HTMLElement|null;
+        if (matchingParent) {
+            matchingParent.focus();
+        } else {
+            this.contentModuleElements[indexOnFail].contentModuleElement.focus();
+        }
+    }
+
+    public getActiveContentModule(modulesDocument: Document): ContentModuleComponent|null {
+        if (
+            !modulesDocument.activeElement ||
+            !modulesDocument.activeElement.classList.contains('content-module')
+        ) {
+            return null;
+        }
+
+        return this.findParentMatchingSelector('content-module', modulesDocument.activeElement!) as ContentModuleComponent;
+    }
+
+    private findParentMatchingSelector(selector: string, relativeElement: Element, matchingElements?: Element[]): Element|null {
+        const modulesDocument: Document = relativeElement.ownerDocument;
+
+        if (!matchingElements) {
+            matchingElements = [...modulesDocument.querySelectorAll(selector)];
+        }
+
+        const matchingElementIndex = matchingElements.indexOf(relativeElement);
+        if (matchingElementIndex !== -1) {
+            return matchingElements[matchingElementIndex];
+        } else if (!relativeElement.parentElement) {
+            return null;
+        } else {
+            return this.findParentMatchingSelector(selector, relativeElement.parentElement, matchingElements);
+        }
     }
 }
 

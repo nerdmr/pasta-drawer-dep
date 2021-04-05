@@ -24,37 +24,28 @@ export class AppKeyboardListenerService {
                 ev.preventDefault();
                 ev.stopPropagation();
 
-                if (!this.appElementsService.document.activeElement) {
-                    // select the first one
-                    contentModules[0].focus();
-                    return;
-                }
-
-                // figure out which content module to select
-                const matchingParent: HTMLElement|null = this.findParentMatchingSelector('.content-module', this.appElementsService.document.activeElement, contentModules) as HTMLElement|null;
-
-                if (!matchingParent) {
-                    contentModules[0].focus();
-                    return;
-                }
-
-                const matchingEleIndex = contentModules.indexOf(matchingParent);
-
                 if (ev.key === 'ArrowDown') {
-                    contentModules[(matchingEleIndex === contentModules.length - 1) ? 0 : matchingEleIndex + 1].focus();
+                    this.appElementsService.pastaDrawerComponent.selectNextContentModule();
                 } else {
-                    contentModules[(matchingEleIndex === 0 ? contentModules.length - 1 : matchingEleIndex - 1)].focus();
+                    this.appElementsService.pastaDrawerComponent.selectPreviousContentModule();
                 }
-
+                
                 return;
             }
 
 
             // Arrow Up and Arrow Down
             if (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft') {
-                const activeContentModule = this.getActiveContentModule();
+                let activeContentModule = this.appElementsService.pastaDrawerComponent.getActiveContentModule(this.appElementsService.document);
 
                 if (!activeContentModule) {
+                    // try once to select the closest, then go
+                    this.appElementsService.pastaDrawerComponent.selectNextContentModule();
+                    activeContentModule = this.appElementsService.pastaDrawerComponent.getActiveContentModule(this.appElementsService.document);
+                }
+
+                if (!activeContentModule) {
+                    // Okay, now we can quit early
                     return;
                 }
 
@@ -101,21 +92,11 @@ export class AppKeyboardListenerService {
         });
     }
 
-    private getActiveContentModule(): ContentModuleComponent|null {
-        // Delete
-        if (
-            !this.appElementsService.document.activeElement ||
-            !this.appElementsService.document.activeElement.classList.contains('content-module')
-        ) {
-            return null;
-        }
-
-        return this.findParentMatchingSelector('content-module', this.appElementsService.document.activeElement!) as ContentModuleComponent;
-    }
-
     private findParentMatchingSelector(selector: string, relativeElement: Element, matchingElements?: Element[]): Element|null {
+        const modulesDocument: Document = relativeElement.ownerDocument;
+
         if (!matchingElements) {
-            matchingElements = [...this.appElementsService.document.querySelectorAll(selector)];
+            matchingElements = [...modulesDocument.querySelectorAll(selector)];
         }
 
         const matchingElementIndex = matchingElements.indexOf(relativeElement);
