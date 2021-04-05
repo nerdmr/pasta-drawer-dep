@@ -55,3 +55,21 @@ export class CHANGE_ME_Component extends ContentRepresentationBase implements Co
 
 customElements.define(elementName, CHANGE_ME_Component);
 ```
+
+## What is this?
+
+Pasta Drawer is a place to put text or images from your clipboard. Content that is pasted can be viewed natively (text/image) or through qualified representations. For example, if JSON is pasted to the page, you have an option to see pretty-printed JSON.
+
+Mobile users can find a dropzone in the region to the right of the header. Long press to get the option to paste content.
+
+You can always recover this help text by clicking the logo.
+
+Some handy features include:
+
+- Pretty-print JSON
+- Extract text from images (yep, paste an image to the page)
+- Plain and formatted text view
+- Persists using your browser's IndexedDB
+- PWA enabled
+
+Happy pasting!
