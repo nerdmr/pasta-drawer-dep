@@ -3,7 +3,7 @@ const CACHE_NAME = "pasta-drawer";
 
 /* Add relative URL of all the static content you want to store in
  * cache storage (this will help us use our app offline)*/
-let resourcesToCache = ["./", "./bundle.js", "./index.html", "./img/logo-192x192.png", "./img/logo-512x512.png"];
+let resourcesToCache = ["./", "./bundle.js", "./index.html", "./img/192.png", "./img/512.png"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(
