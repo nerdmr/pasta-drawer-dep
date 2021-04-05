@@ -31,7 +31,10 @@ export class TextContentRepresentationComponent extends ContentRepresentationBas
     }
 
     connectedCallback() {
-        this.component.innerHTML = `<pre>${this.data.items.find((item) => item.type === ClipboardItemType.textPlain)?.data}</pre>`;
+        const preElement = document.createElement('pre');
+        preElement.innerText = this.data.items.find((item) => item.type === ClipboardItemType.textPlain)?.data;
+        
+        this.component.appendChild(preElement);
     }
 
     async canRender(value: ClipboardValue): Promise<boolean> {

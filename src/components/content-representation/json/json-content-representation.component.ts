@@ -3,6 +3,7 @@ import { ContentModuleConfiguration } from "../../../model/content-module-config
 import { ClipboardItemKind, ClipboardItemType, ClipboardValue } from "../../../services/clipboard-value/clipboard-value.service";
 import { ShadowCssComponentBase } from "../../shadow-sass-base/shadow-sass.component.base";
 import { ContentRepresentation } from "../content-representation";
+import { ContentRepresentationBase } from "../content-representation.component.base";
 import * as css from './json-content-representation.component.scss'
 
 const elementName = 'content-representation-json';
@@ -15,7 +16,7 @@ const elementName = 'content-representation-json';
         },
     }
 ])
-export class JsonContentRepresentationComponent extends ShadowCssComponentBase implements ContentRepresentation {
+export class JsonContentRepresentationComponent extends ContentRepresentationBase implements ContentRepresentation {
     name: string = '🦋 Pretty';
     element: string = elementName;
 
@@ -24,11 +25,15 @@ export class JsonContentRepresentationComponent extends ShadowCssComponentBase i
     }
 
     async copy(): Promise<string> {
-        throw new Error("Method not implemented.");
+        return JSON.stringify(JSON.parse(this.data.items.find((item) => item.type === ClipboardItemType.textPlain)?.data), null, 2);
     }
 
     connectedCallback() {
-        this.component.innerHTML = `<pre class="code">${JSON.stringify(JSON.parse(this.data.items.find((item) => item.type === ClipboardItemType.textPlain)?.data), null, 2)}</pre>`;
+        const preElement = document.createElement('pre');
+        preElement.className = 'code';
+        preElement.innerText = JSON.stringify(JSON.parse(this.data.items.find((item) => item.type === ClipboardItemType.textPlain)?.data), null, 2);
+        
+        this.component.appendChild(preElement);
     }
 
     async canRender(value: ClipboardValue): Promise<boolean> {
