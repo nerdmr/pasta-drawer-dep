@@ -1,3 +1,5 @@
+import { container } from "tsyringe";
+import { PastaDrawer } from "../../app/app";
 import { ContentModuleConfiguration } from "../../model/content-module-configuration.interface";
 import { ClipboardValue } from "../../services/clipboard-value/clipboard-value.service";
 import { ContentModuleComponent } from "../content-module/content-module.component";

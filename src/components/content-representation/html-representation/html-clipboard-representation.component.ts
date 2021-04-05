@@ -1,7 +1,7 @@
 import { registry } from 'tsyringe';
 import { ClipboardItemType, ClipboardValue } from '../../../services/clipboard-value/clipboard-value.service';
+import { ShadowCssComponentBase } from '../../shadow-sass-base/shadow-sass.component.base';
 import { ContentRepresentation } from '../content-representation';
-import { ContentRepresentationBase } from '../content-representation.component.base';
 import * as css from './html-clipboard-representation.component.scss';
 
 /**
@@ -22,8 +22,8 @@ const elementName = 'html-clipboard-representation';
         },
     }
 ])
-export class HtmlClipboardRepresentation extends ContentRepresentationBase implements ContentRepresentation {
-    name: string = 'HTML';  // Tab value
+export class HtmlClipboardRepresentation extends ShadowCssComponentBase implements ContentRepresentation {
+    name: string = 'Formatted';  // Tab value
     element: string = elementName;
 
     constructor(public data: ClipboardValue) {

@@ -3,11 +3,9 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import typescript from 'rollup-plugin-typescript2';
+import json from '@rollup/plugin-json';
 import scss from 'rollup-plugin-scss';
-
-
 import copy from 'rollup-plugin-copy'
-
 
 // this override is needed because Module format cjs does not support top-level await
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -33,9 +31,9 @@ export default {
   ],
   plugins: [
     // peerDepsExternal(),
+    json(),
     scss({
       output: false,
-      
     }),
     replace({
       'process.env.OCR_BASE_PATH': (process.env.OCR_BASE_PATH) ? `'${process.env.OCR_BASE_PATH}'` : `'http://localhost:5000'`,

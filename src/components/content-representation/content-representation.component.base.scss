@@ -4,3 +4,7 @@
 .component > * {
     padding: $spacer-1;
 }
+
+.component {
+    overflow: auto;
+}

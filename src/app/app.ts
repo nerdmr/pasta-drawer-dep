@@ -6,6 +6,7 @@ import { AppElementsService } from "../services/app-elements/app-elements.servic
 import { ClipboardValue, ClipboardValueService } from "../services/clipboard-value/clipboard-value.service";
 import { DatabaseService } from "../services/database/database.service";
 import { AppKeyboardListenerService } from "../services/app-keyboard-listener/app-keyboard-listener.service";
+import * as helpTextJsonModule from '../json/help-text-module.json';
 
 @singleton()
 export class PastaDrawer {
@@ -28,6 +29,7 @@ export class PastaDrawer {
 
         this.databaseService.loadPages().then((pages) => {
             this.pages = pages;
+
             if (!this.pages || this.pages.length === 0) {
                 this.pages = [
                     {
@@ -39,12 +41,24 @@ export class PastaDrawer {
     
             this.activePage = this.pages[0];
             this.renderPage(this.activePage);
+
+            if (this.activePage.modules.length === 0) {
+                this.addHelpModule();
+            }
         });
         
 
         this.listenForPaste();
         this.listenForModuleEvents();
 
+        document.querySelector('.logo')?.addEventListener('click', (ev) => {
+            this.addHelpModule();
+        });
+    }
+
+    private addHelpModule() {
+        const helpModule = helpTextJsonModule;
+        this.insertModule(helpModule);
     }
 
     private listenForModuleEvents() {
@@ -61,7 +75,7 @@ export class PastaDrawer {
             }
             
             const clipboardValue = await this.clipboardValueService.getClipboardValue(event.clipboardData);
-        
+
             this.insertModule(clipboardValue, true);
         });
     }
@@ -79,7 +93,6 @@ export class PastaDrawer {
             this.appElementsService.pastaDrawerComponent.addContentModule(module);
         }
     }
-    
 }
 
 const appInstance = container.resolve(PastaDrawer);
