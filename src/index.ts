@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { container } from "tsyringe";
 
 // Register representations that use the generic base
-// container.register('ContentRepresentation', { useValue: new GenericRepresentationComponent(null!, new TestRepresentation()) });
+container.register('ContentRepresentation', { useValue: new GenericRepresentationComponent(null!, new TestRepresentation()) });
 
 // app
 import './app/app';
