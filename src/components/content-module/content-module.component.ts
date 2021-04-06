@@ -98,12 +98,11 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
                 btn.addEventListener('click', (ev) => {
                     this.selectRepresenation(contentRepresentation);
                 });
-
-                if (i == 0) {
-                    this.selectRepresenation(contentRepresentation);
-                }
             }
         };
+
+        // Select first representation
+        this.selectRepresenation(this.contentRepresentations[0]);
             
 
         setTimeout(() => {
