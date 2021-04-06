@@ -38,44 +38,48 @@ code {
     font-family: $font-mono;
 }
 
-header {
-    height: 60px;
-    padding: $spacer-1;
-    display: flex;
 
-    img {
-        flex: 0;
-        height: 100%;
-        margin-right: $spacer-1;
+.pasta-drawer {
+    max-width: 1024px;
+    margin: 0 auto;
+
+    &__header {
+        height: 60px;
+        padding: $spacer-1;
+        display: flex;
     }
-
     h1 {
         flex: 1;
         font-size: 1.6rem;
         display: flex;
         align-items: center;
     }
-
-    .logo {
+    img {
+        flex: 0;
+        height: 100%;
+        margin-right: $spacer-1;
+    }
+    &__logo {
         flex: 0;
         display: flex;
         cursor: pointer;
     }
-
-    .dropzone {
+    &__dropzone {
         flex: 1;
         opacity: 0;
         border: 0;
         cursor: default;
     }
+    &__modules {
+        &>* {
+            display: block;
+            margin-bottom: $spacer-1;
+        }
+    }
+
+
 }
 
 .pasta-drawer__modules {
-    max-width: 800px;
-    margin: 0 auto;
-
-    &>* {
-        display: block;
-        margin-bottom: $spacer-1;
-    }
+    
 }

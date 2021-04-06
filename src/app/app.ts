@@ -1,7 +1,6 @@
 import { container, singleton } from "tsyringe";
 import { PastaDrawerComponent } from "../components/pasta-drawer-app/pasta-drawer.component";
 import { AppPage } from "../model/app-page.interface";
-import { ContentModuleConfiguration } from "../model/content-module-configuration.interface";
 import { AppElementsService } from "../services/app-elements/app-elements.service";
 import { ClipboardValue, ClipboardValueService } from "../services/clipboard-value/clipboard-value.service";
 import { DatabaseService } from "../services/database/database.service";
@@ -51,7 +50,7 @@ export class PastaDrawer {
         this.listenForPaste();
         this.listenForModuleEvents();
 
-        document.querySelector('.logo')?.addEventListener('click', (ev) => {
+        document.querySelector('.pasta-drawer__logo')?.addEventListener('click', (ev) => {
             this.addHelpModule();
         });
     }
@@ -81,7 +80,7 @@ export class PastaDrawer {
     }
 
     private insertModule(module: ClipboardValue, insertAtBeginning = false) {
-        this.appElementsService.pastaDrawerComponent.addContentModule(module, insertAtBeginning)?.focus();
+        this.appElementsService.pastaDrawerComponent.addContentModule(module, insertAtBeginning);
         
         this.activePage.modules.unshift(module);
         this.databaseService.savePages(this.pages);

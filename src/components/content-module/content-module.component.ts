@@ -1,7 +1,9 @@
 import { container } from "tsyringe";
 import { ContentModuleConfiguration } from "../../model/content-module-configuration.interface";
+import { GenericRepresentation } from "../../model/generic-representation.interface";
 import { ClipboardValue } from "../../services/clipboard-value/clipboard-value.service";
 import { ContentRepresentation } from "../content-representation/content-representation";
+import { GenericRepresentationComponent } from "../generic-representation/generic-representation.component";
 import { ShadowCssComponentBase } from "../shadow-sass-base/shadow-sass.component.base";
 import * as css from './content-module.component.scss';
 
@@ -59,48 +61,50 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
         const tabs = contentContainer.querySelector('.content-module__tabs') as HTMLElement;
         const tabContainers = contentContainer.querySelector('.content-module__content-representations') as HTMLElement;
 
-        // render applicable representations
-        const eles: string[] = [];
-
         for (let i = 0; i < this.contentRepresentationComponents.length; i++) {
-            const contentRepresentation = this.contentRepresentationComponents[i];
-            if (await contentRepresentation.canRender(this.data)) {
-                eles.push(contentRepresentation.element);
+            const contentRepresentationComponent = this.contentRepresentationComponents[i];
+            if (await contentRepresentationComponent.canRender(this.data)) {
+                
+                const type = contentRepresentationComponent.element;
+                
+                const btn = document.createElement('button');
+                btn.className = 'content-module__tab';
+
+                const body = document.createElement('div');
+                body.className = 'content-module__content-representation';
+
+                let representationElement: ContentRepresentation;
+                if (type === 'generic-representation') {
+                    const genericComponent = contentRepresentationComponent as GenericRepresentationComponent;
+                    representationElement = new GenericRepresentationComponent(this.data, genericComponent.representationClass);
+                } else {
+                    representationElement = this.getElementForType(type, this.data);
+                }
+                
+                btn.innerHTML = representationElement.name;
+                body.appendChild(representationElement);
+                tabs.appendChild(btn);
+
+                tabContainers.appendChild(body);
+
+                const contentRepresentation: Represenation = {
+                    button: btn,
+                    body: body,
+                    representationElement: representationElement,
+                };
+
+                this.contentRepresentations.push(contentRepresentation);
+
+                btn.addEventListener('click', (ev) => {
+                    this.selectRepresenation(contentRepresentation);
+                });
+
+                if (i == 0) {
+                    this.selectRepresenation(contentRepresentation);
+                }
             }
-        }
-        
-        for (let i = 0; i < eles.length; i++) {
-            const type = eles[i];
+        };
             
-            const btn = document.createElement('button');
-            btn.className = 'content-module__tab';
-
-            const body = document.createElement('div');
-            body.className = 'content-module__content-representation';
-
-            const represenationElement = this.getElementForType(type, this.data);
-            btn.innerHTML = represenationElement.name;
-            body.appendChild(represenationElement);
-            tabs.appendChild(btn);
-
-            tabContainers.appendChild(body);
-
-            const contentRepresentation: Represenation = {
-                button: btn,
-                body: body,
-                representationElement: represenationElement,
-            };
-
-            this.contentRepresentations.push(contentRepresentation);
-
-            btn.addEventListener('click', (ev) => {
-                this.selectRepresenation(contentRepresentation);
-            });
-
-            if (i == 0) {
-                this.selectRepresenation(contentRepresentation);
-            }
-        }
 
         setTimeout(() => {
             contentContainer.classList.remove('pre-render');

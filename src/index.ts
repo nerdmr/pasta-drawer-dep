@@ -1,6 +1,8 @@
 import "reflect-metadata";
+import { container } from "tsyringe";
 
-
+// Register representations that use the generic base
+// container.register('ContentRepresentation', { useValue: new GenericRepresentationComponent(null!, new TestRepresentation()) });
 
 // app
 import './app/app';
@@ -14,6 +16,9 @@ import { JsonContentRepresentationComponent } from "./components/content-represe
 import { TextContentRepresentationComponent } from "./components/content-representation/text/text-content-representation.component";
 import { PastaDrawerComponent } from "./components/pasta-drawer-app/pasta-drawer.component";
 import { WebpageRepresentationComponent } from "./components/content-representation/webpage/webpage-representation.component";
+import { GenericRepresentationComponent } from "./components/generic-representation/generic-representation.component";
+import { TestRepresentation } from "./representations/test-representation";
+
 
 HtmlClipboardRepresentation;
 CabinetLoaderComponent;

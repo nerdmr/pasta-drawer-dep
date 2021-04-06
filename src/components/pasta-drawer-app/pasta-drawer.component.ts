@@ -19,11 +19,18 @@ export class PastaDrawerComponent extends HTMLElement {
     private loadedHandler!: () => void;
 
     connectedCallback() {
-        this.innerHTML = `<style>${css.default}</style>
-        <header>
-            <div class="logo"><img src="img/192.png"><h1>Pasta Drawer</h1></div>
-            <textarea id="mobile-dropzone" class="dropzone"></textarea>
-        </header><div class="pasta-drawer__modules"></div>`;
+        this.innerHTML = `
+        <style>${css.default}</style>
+        <div class="pasta-drawer">
+            <header class="pasta-drawer__header">
+                <div class="pasta-drawer__logo">
+                    <img src="img/192.png"><h1>Pasta Drawer</h1>
+                </div>
+                <textarea id="mobile-dropzone" class="pasta-drawer__dropzone"></textarea>
+            </header>
+            <div class="pasta-drawer__modules"></div>
+        </div>
+        `;
         this.modulesElement = this.querySelector('.pasta-drawer__modules') as HTMLElement;
 
         while (this.preRenderQueue.length > 0) {
@@ -53,7 +60,7 @@ export class PastaDrawerComponent extends HTMLElement {
         });
 
         this.loadedHandler = () => {
-            this.selectClosestContentModule(0);
+            this.selectContentModuleIndex(0);
         };
     }
 
@@ -97,6 +104,14 @@ export class PastaDrawerComponent extends HTMLElement {
         }
 
         return contentModuleComponent;
+    }
+
+    private selectContentModuleIndex(contentModuleIndex: number) {
+        if (!this.contentModuleElements || this.contentModuleElements.length === 0) {
+            return;
+        }
+
+        this.contentModuleElements[0].contentModuleElement.focus();
     }
 
     public selectNextContentModule() {
