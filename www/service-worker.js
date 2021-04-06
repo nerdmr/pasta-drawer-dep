@@ -13,37 +13,38 @@ self.addEventListener('install', (e) => {
   );
 });
 
-// Cache and return requests
-// self.addEventListener('fetch', (e) => {
-//   e.respondWith(
-//     caches.match(e.request).then((response) => {
-//       return response || fetch(e.request);
-//     })
-//   );
-// });
-
-self.addEventListener("fetch", (event) => {
-  const url = new URL(event.request.url);
-  // If this is an incoming POST request for the
-  // registered "action" URL, respond to it.
-  if (event.request.method === "POST" && url.pathname === "/") {
-    event.respondWith(
-      (async () => {
-        const formData = await event.request.formData();
-        const link = formData.get("link") || "";
-        alert(link);
-        // const responseUrl = await saveBookmark(link);
-        return Response.redirect(responseUrl, 303);
-      })()
-    );
-  } else {
-    event.respondWith(
-      caches.match(event.request).then((response) => {
-        return response || fetch(event.request);
-      })
-    );
-  }
+Cache and return requests
+self.addEventListener('fetch', (e) => {
+  e.respondWith(
+    caches.match(e.request).then((response) => {
+      return response || fetch(e.request);
+    })
+  );
 });
+
+// self.addEventListener("fetch", (event) => {
+//   const url = new URL(event.request.url);
+  
+//   if (event.request.method === "POST" && url.pathname === "/bookmark") {
+//     event.respondWith(
+//       (async () => {
+//         const formData = await event.request.formData();
+//         const link = formData.get("link") || "";
+        
+//         return new Response('Bookmark saved: ' + link);
+
+//         // const responseUrl = await saveBookmark(link);
+//         // return Response.redirect(responseUrl, 303);
+//       })()
+//     );
+//   } else {
+//     event.respondWith(
+//       caches.match(event.request).then((response) => {
+//         return response || fetch(event.request);
+//       })
+//     );
+//   }
+// });
 
 // Update a service worker
 const cacheWhitelist = ['pasta-drawer'];

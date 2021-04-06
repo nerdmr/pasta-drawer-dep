@@ -2,8 +2,8 @@
   "name": "Pasta Drawer",
   "short_name": "Pasta Drawer",
   "start_url": "/",
-  "background_color": "#FFDCB5",
-  "theme_color": "#1E003D",
+  "background_color": "#FFFFFF",
+  "theme_color": "#006091",
   "icons": [
     {
       "src": "img/512.png",
@@ -19,13 +19,5 @@
     }
   ],
   "display": "standalone",
-  "orientation": "portrait",
-  "share_target": {
-    "action": "/",
-    "method": "POST",
-    "enctype": "multipart/form-data",
-    "params": {
-      "url": "link"
-    }
-  }
+  "orientation": "portrait"
 }
