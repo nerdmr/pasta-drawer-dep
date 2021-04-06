@@ -47,7 +47,7 @@ self.addEventListener('fetch', (e) => {
 // });
 
 // Update a service worker
-const cacheWhitelist = ['pasta-drawer'];
+const cacheWhitelist = ['pasta-drawer-v1.0.1'];
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
