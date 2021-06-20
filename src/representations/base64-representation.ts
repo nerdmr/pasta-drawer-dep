@@ -1,9 +1,17 @@
 import { GenericRepresentation, GenericRepresentationBase } from "../model/generic-representation.interface";
 import { ClipboardValue } from "../services/clipboard-value/clipboard-value.service";
 
-export class TestRepresentation extends GenericRepresentationBase implements GenericRepresentation {
+export class Base64Representation extends GenericRepresentationBase implements GenericRepresentation {
     name: string = 'Base64';
     private decodedValue: string;
+
+    /**
+     *
+     */
+    constructor() {
+        super();
+        console.log('ctor', 'representation');
+    }
 
     async canRender(data: ClipboardValue): Promise<boolean> {
         this.decodedValue = this.getDecodedValue(data);
@@ -21,7 +29,7 @@ export class TestRepresentation extends GenericRepresentationBase implements Gen
 
         this.setHtml(component, this.decodedValue);
     }
-    
+
     css(data: ClipboardValue): string {
         return '';
     }

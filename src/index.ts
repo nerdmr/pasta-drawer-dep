@@ -2,7 +2,8 @@ import "reflect-metadata";
 import { container } from "tsyringe";
 
 // Register representations that use the generic base
-container.register('ContentRepresentation', { useValue: new GenericRepresentationComponent(null!, new TestRepresentation()) });
+// TODO GenericRepresentationComponent needs to have a factory instead of this approach of being the orchestrator and the component
+container.register('ContentRepresentation', { useValue: new GenericRepresentationComponent(null!, new Base64Representation(), () => new Base64Representation()) });
 
 // app
 import './app/app';
@@ -17,7 +18,7 @@ import { TextContentRepresentationComponent } from "./components/content-represe
 import { PastaDrawerComponent } from "./components/pasta-drawer-app/pasta-drawer.component";
 import { WebpageRepresentationComponent } from "./components/content-representation/webpage/webpage-representation.component";
 import { GenericRepresentationComponent } from "./components/generic-representation/generic-representation.component";
-import { TestRepresentation } from "./representations/test-representation";
+import { Base64Representation } from "./representations/base64-representation";
 
 
 HtmlClipboardRepresentation;

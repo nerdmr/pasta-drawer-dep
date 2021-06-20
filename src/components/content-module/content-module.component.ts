@@ -76,7 +76,7 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
                 let representationElement: ContentRepresentation;
                 if (type === 'generic-representation') {
                     const genericComponent = contentRepresentationComponent as GenericRepresentationComponent;
-                    representationElement = new GenericRepresentationComponent(this.data, genericComponent.representationClass);
+                    representationElement = new GenericRepresentationComponent(this.data, genericComponent.newRepresentationInstance());
                 } else {
                     representationElement = this.getElementForType(type, this.data);
                 }
