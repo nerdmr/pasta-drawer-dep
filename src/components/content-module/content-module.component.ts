@@ -80,6 +80,8 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
                 } else {
                     representationElement = this.getElementForType(type, this.data);
                 }
+
+                representationElement.classList.add('content-representation');
                 
                 btn.innerHTML = representationElement.name;
                 body.appendChild(representationElement);
@@ -201,7 +203,6 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
     private getElementForType(type: string, data: ClipboardValue): ContentRepresentation {
         const ele = document.createElement(type) as ContentRepresentation;
         ele.data = data;
-        ele.classList.add('content-representation');
         return ele;
     }
 
