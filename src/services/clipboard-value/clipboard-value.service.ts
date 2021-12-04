@@ -37,9 +37,7 @@ export class ClipboardValueService {
     /**
      *
      */
-    constructor(@injectAll('PastaTypeProvider') private pastaTypeProviders: PastaTypeProvider[]) {
-        console.log('pasta type providers', pastaTypeProviders);
-    }
+    constructor(@injectAll('PastaTypeProvider') private pastaTypeProviders: PastaTypeProvider[]) { }
 
     public async getClipboardValue(clipboardData: DataTransfer): Promise<ClipboardValue> {
 

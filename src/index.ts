@@ -9,9 +9,11 @@ container.register('ContentRepresentation', { useValue: new GenericRepresentatio
 // Import pasta type providers
 import { JsonPastaTypeProvider } from "./providers/pasta-type-providers/json-pasta-type.provider";
 import { Base64PastaTypeProvider } from "./providers/pasta-type-providers/base64-pasta-type.provider";
+import { LinkPastaTypeProvider } from "./providers/pasta-type-providers/link-pasta-type.provider";
 
 JsonPastaTypeProvider;
 Base64PastaTypeProvider;
+LinkPastaTypeProvider;
 
 
 // app

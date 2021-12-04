@@ -1,9 +1,10 @@
 import { registry } from 'tsyringe';
+import { PastaType } from '../../../model/pasta-type.enum';
 import { ClipboardValue } from '../../../services/clipboard-value/clipboard-value.service';
 import { ShadowCssComponentBase } from '../../shadow-sass-base/shadow-sass.component.base';
 import { ContentRepresentation } from '../content-representation';
 import { ContentRepresentationBase } from '../content-representation.component.base';
-import * as css from './webpage-representation.component.scss'
+import * as css from './webpage-representation.component.scss';
 
 const elementName = 'webpage-representation';
 
@@ -23,9 +24,27 @@ export class WebpageRepresentationComponent extends ContentRepresentationBase im
         super(css);
     }
 
-    connectedCallback() {
+    async connectedCallback() {
         // render it
         this.loading = true;
+
+
+        // get html
+        const url = this.getRawTextValue(this.data);
+        const options: RequestInit = {
+            method: 'GET'
+        };
+
+        try {
+            const response = await fetch(url);
+            const responseBody = await response.text();
+            
+
+        } catch (err) {
+            console.log('err', err);
+        }
+
+
         setTimeout(() => {
             this.loading = false;
             this.component.innerHTML = `<p>Web link representation not yet enabled, but might be soone.</p>`;
@@ -37,17 +56,10 @@ export class WebpageRepresentationComponent extends ContentRepresentationBase im
     }
 
     async canRender(value: ClipboardValue): Promise<boolean> {
-        const rawText = this.getRawTextValue(value);
-        return this.isValidHttpUrl(rawText);
-    }
+        return value.pastaTypes.indexOf(PastaType.link) > -1;
 
-    private isValidHttpUrl(potentialUrl: string): boolean {
-        try {
-            const url = new URL(potentialUrl);
-            return url.protocol === "http:" || url.protocol === "https:";
-        } catch (e) {
-            return false;
-        }
+        // const rawText = this.getRawTextValue(value);
+        // return this.isValidHttpUrl(rawText);
     }
 }
 

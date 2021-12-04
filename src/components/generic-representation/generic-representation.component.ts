@@ -26,7 +26,6 @@ export class GenericRepresentationComponent extends ContentRepresentationBase im
 
     constructor(public data: ClipboardValue, public representationClass: GenericRepresentation, public newRepresentationInstance: () => GenericRepresentation = null) {
         super({ default: (representationClass).css(data) });
-        console.log('ctor', 'genericrepresetnationcomponent', data);
     }
 
     connectedCallback() {
