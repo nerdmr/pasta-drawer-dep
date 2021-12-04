@@ -1,4 +1,6 @@
-import { isValueProvider, singleton } from "tsyringe";
+import { injectAll, isValueProvider, singleton } from "tsyringe";
+import { PastaType } from "../../model/pasta-type.enum";
+import { PastaTypeProvider } from "../../providers/pasta-type-providers/json-pasta-type.provider";
 
 export enum ClipboardItemType {
     textPlain = 'text/plain',
@@ -18,74 +20,122 @@ export interface ClipboardItem {
 
 export interface ClipboardValue {
     type: 'text' | 'file' | 'image';
+    pastaTypes: PastaType[];
+    canBePastaTypes: PastaType[];
     items: ClipboardItem[];
     createdAt: string;
+}
+
+interface StaticDataTransferItem extends DataTransferItem {
+    asText?: string;
+    asFile?: File;
 }
 
 @singleton()
 export class ClipboardValueService {
 
-    public async getClipboardValue(clipboardData: DataTransfer): Promise<ClipboardValue> {
-        return new Promise<ClipboardValue>((resolve, reject) => {
+    /**
+     *
+     */
+    constructor(@injectAll('PastaTypeProvider') private pastaTypeProviders: PastaTypeProvider[]) {
+        console.log('pasta type providers', pastaTypeProviders);
+    }
 
-            const returnValue: ClipboardValue = {
-                type: 'text', // This value is updated on the fly if we process an image item
-                items: [],
-                createdAt: new Date().toISOString(),
+    public async getClipboardValue(clipboardData: DataTransfer): Promise<ClipboardValue> {
+
+        const result: ClipboardValue = {
+            type: 'text', // This value is updated on the fly if we process an image item
+            items: [],
+            pastaTypes: [],
+            canBePastaTypes: [],
+            createdAt: new Date().toISOString(),
+        }
+
+        const staticClipboardItems = await this.getClipboardData(clipboardData.items);
+
+        for (let i = 0; i < staticClipboardItems.length; i++) {
+            const item = staticClipboardItems[i];
+            const itemKind: ClipboardItemKind = item.kind as ClipboardItemKind;
+            const itemType: ClipboardItemType = item.type as ClipboardItemType;
+
+            let clipboardItem: ClipboardItem;
+
+            if (item.kind === 'file') {
+                
+                result.type = 'file';
+                clipboardItem = {
+                    type: itemType,
+                    kind: itemKind,
+                    data: item.asFile,
+                }
+                result.items.push(clipboardItem);
+
+            } else if (item.kind === 'string') {
+                clipboardItem = {
+                    type: itemType,
+                    kind: itemKind,
+                    data: item.asText,
+                }
+                result.items.push(clipboardItem);
             }
 
-            const numberOfItems = clipboardData.items.length;
+            // update pasta types based on clipboard item
+            const pastaTypes = await this.getPastaTypes(clipboardItem.data);
+            pastaTypes.types.map((pt => result.pastaTypes.indexOf(pt) === -1 ? result.pastaTypes.push(pt) : -1));
+            pastaTypes.couldBeTypes.map((pt => result.canBePastaTypes.indexOf(pt) === -1 ? result.canBePastaTypes.push(pt) : -1));
+        }
 
+        return result;
+    }
 
+    private getClipboardData(dataTransferItemList: DataTransferItemList): Promise<StaticDataTransferItem[]> {
+        return new Promise<DataTransferItem[]>((resolve, reject) => {
+            const numberOfItems = dataTransferItemList.length;
+            const result: StaticDataTransferItem[] = [];
             for (let i = 0; i < numberOfItems; i++) {
-                const item: DataTransferItem = clipboardData.items[i];
+                const dataTransferItem = dataTransferItemList[i];
 
-                // store these since items are volatile
-                const itemKind: ClipboardItemKind = item.kind as ClipboardItemKind;
-                const itemType: ClipboardItemType = item.type as ClipboardItemType;
+                const derivedItem: StaticDataTransferItem = {
+                    kind: dataTransferItem.kind,
+                    type: dataTransferItem.type,                                        
+                } as any;
 
-                if (item.kind === 'file') {
-                    const blob = item.getAsFile();
-                    
-                    returnValue.type = 'file';
+                if (dataTransferItem.kind === 'file') {
+                    const blob = dataTransferItem.getAsFile();
+                    derivedItem.asFile = blob;    
+                    result.push(derivedItem);
+                } else {
+                    dataTransferItem.getAsString((data) => {
+                        derivedItem.asText = data;
+                        result.push(derivedItem);
 
-                    returnValue.items.push({
-                        type: itemType,
-                        kind: itemKind,
-                        data: blob,
-                    });
-
-                } else if (item.kind === 'string') {
-                    
-                    this.getClipboardItemText(item).then((value) => {
-                        returnValue.items.push({
-                            type: itemType,
-                            kind: itemKind,
-                            data: value,
-                        });
-                        
-                        if (returnValue.items.length == numberOfItems) {
-                            // ready to resolve
-                            resolve(returnValue);
-                        }
+                        if (result.length === numberOfItems)
+                            resolve(result);
                     });
                 }
             }
 
-            if (returnValue.items.length == numberOfItems) {
-                // ready to resolve
-                resolve(returnValue);
+            if (result.length === numberOfItems)
+                resolve(result);
+
+        });
+    };
+
+    private async getPastaTypes(value: string): Promise<{ types: PastaType[], couldBeTypes: PastaType[] }> {
+
+        const result: { types: PastaType[], couldBeTypes: PastaType[] } = { types: [], couldBeTypes: [] };
+
+        for (let i = 0; i < this.pastaTypeProviders.length; i++) {
+            const pastaTypeProvider = this.pastaTypeProviders[i];
+
+            if (await pastaTypeProvider.isType(value)) {
+                result.types.push(pastaTypeProvider.type);
+                result.couldBeTypes.push(pastaTypeProvider.type);
+            } else if (await pastaTypeProvider.isType(value)) {
+                result.couldBeTypes.push(pastaTypeProvider.type);
             }
-            
-        });
-    }
+        }
 
-    private getClipboardItemText(clipboardItem: DataTransferItem): Promise<string> {
-        return new Promise<string>((resolve, reject) => {
-            clipboardItem.getAsString((data) => {
-                resolve(data);
-            });
-        });
-
+        return result;
     }
 }

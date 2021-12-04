@@ -24,6 +24,9 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
     constructor(private data: ClipboardValue) {
         super(css, false);
 
+        if (!data.pastaTypes) data.pastaTypes = [];
+        if (!data.canBePastaTypes) data.canBePastaTypes = [];
+
         this.contentRepresentationComponents = container.resolveAll('ContentRepresentation');
     }
 

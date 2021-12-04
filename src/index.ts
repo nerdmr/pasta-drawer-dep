@@ -3,7 +3,16 @@ import { container } from "tsyringe";
 
 // Register representations that use the generic base
 // TODO GenericRepresentationComponent needs to have a factory instead of this approach of being the orchestrator and the component
+// TODO put these in a separate file for dependency injection
 container.register('ContentRepresentation', { useValue: new GenericRepresentationComponent(null!, new Base64Representation(), () => new Base64Representation()) });
+
+// Import pasta type providers
+import { JsonPastaTypeProvider } from "./providers/pasta-type-providers/json-pasta-type.provider";
+import { Base64PastaTypeProvider } from "./providers/pasta-type-providers/base64-pasta-type.provider";
+
+JsonPastaTypeProvider;
+Base64PastaTypeProvider;
+
 
 // app
 import './app/app';
@@ -21,6 +30,8 @@ import { GenericRepresentationComponent } from "./components/generic-representat
 import { Base64Representation } from "./representations/base64-representation";
 
 
+
+
 HtmlClipboardRepresentation;
 CabinetLoaderComponent;
 PastaDrawerComponent;
@@ -29,4 +40,3 @@ JsonContentRepresentationComponent;
 ImageContentRepresentationComponent;
 ImageTextRepresentationComponent;
 WebpageRepresentationComponent; // WIP
-

@@ -1,5 +1,6 @@
 import { container, registry } from "tsyringe";
 import { ContentModuleConfiguration } from "../../../model/content-module-configuration.interface";
+import { PastaType } from "../../../model/pasta-type.enum";
 import { ClipboardItemKind, ClipboardItemType, ClipboardValue } from "../../../services/clipboard-value/clipboard-value.service";
 import { ShadowCssComponentBase } from "../../shadow-sass-base/shadow-sass.component.base";
 import { ContentRepresentation } from "../content-representation";
@@ -37,6 +38,11 @@ export class JsonContentRepresentationComponent extends ContentRepresentationBas
     }
 
     async canRender(value: ClipboardValue): Promise<boolean> {
+
+        if (value.pastaTypes.indexOf(PastaType.json) !== -1)
+            return true;
+
+        // by letting it continue, we're letting it be backwards compatible
         if (value.type !== 'text') {
             return false;
         }
@@ -54,6 +60,15 @@ export class JsonContentRepresentationComponent extends ContentRepresentationBas
         }
         return true;
     }
+
+    // public isJson(value: string): boolean {
+    //     try {
+    //         JSON.parse(value);
+    //     } catch (e) {
+    //         return false;
+    //     }
+    //     return true;
+    // }
 }
 
 customElements.define(elementName, JsonContentRepresentationComponent);

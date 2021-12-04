@@ -5,7 +5,7 @@ export interface GenericRepresentation {
     canRender(data: ClipboardValue): Promise<boolean>;
     render(component: HTMLElement, data: ClipboardValue): void;
     css(data: ClipboardValue): string;
-    copy(data: ClipboardValue): string;
+    copy(data: ClipboardValue): Promise<string>;
 }
 
 export class GenericRepresentationBase {
