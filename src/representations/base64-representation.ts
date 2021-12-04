@@ -10,7 +10,6 @@ export class Base64Representation extends GenericRepresentationBase implements G
      */
     constructor() {
         super();
-        console.log('ctor', 'representation');
     }
 
     async canRender(data: ClipboardValue): Promise<boolean> {

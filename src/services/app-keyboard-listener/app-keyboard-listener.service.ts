@@ -16,7 +16,7 @@ export class AppKeyboardListenerService {
             
             // Arrow Up and Arrow Down
             if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
-                const contentModules = [...this.appElementsService.document.querySelectorAll('.content-module')] as HTMLElement[];
+                const contentModules = this.getArray(this.appElementsService.document.querySelectorAll('.content-module')) as HTMLElement[];
                 if (contentModules.length === 0) {
                     return;
                 }
@@ -96,7 +96,7 @@ export class AppKeyboardListenerService {
         const modulesDocument: Document = relativeElement.ownerDocument;
 
         if (!matchingElements) {
-            matchingElements = [...modulesDocument.querySelectorAll(selector)];
+            matchingElements = this.getArray(modulesDocument.querySelectorAll(selector));
         }
 
         const matchingElementIndex = matchingElements.indexOf(relativeElement);
@@ -109,5 +109,12 @@ export class AppKeyboardListenerService {
         }
     }
 
-
+    private getArray(nodeList: NodeListOf<any>) {
+        const arr = [];
+        for (let i = 0; i < nodeList.length; i++) {
+            const node = nodeList[i];
+            arr.push(node);
+        }
+        return arr;
+    }
 }

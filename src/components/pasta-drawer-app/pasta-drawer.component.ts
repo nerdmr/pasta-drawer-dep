@@ -162,7 +162,7 @@ export class PastaDrawerComponent extends HTMLElement {
         const modulesDocument: Document = relativeElement.ownerDocument;
 
         if (!matchingElements) {
-            matchingElements = [...modulesDocument.querySelectorAll(selector)];
+            matchingElements = this.getArray(modulesDocument.querySelectorAll(selector));
         }
 
         const matchingElementIndex = matchingElements.indexOf(relativeElement);
@@ -173,6 +173,15 @@ export class PastaDrawerComponent extends HTMLElement {
         } else {
             return this.findParentMatchingSelector(selector, relativeElement.parentElement, matchingElements);
         }
+    }
+
+    private getArray(nodeList: NodeListOf<any>) {
+        const arr = [];
+        for (let i = 0; i < nodeList.length; i++) {
+            const node = nodeList[i];
+            arr.push(node);
+        }
+        return arr;
     }
 }
 
