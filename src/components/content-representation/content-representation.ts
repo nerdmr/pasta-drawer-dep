@@ -9,4 +9,5 @@ export interface ContentRepresentation extends HTMLElement {
     data: ClipboardValue,
     canRender(value: ClipboardValue): Promise<boolean>;
     copy(): Promise<string>;
+    edit?(): Promise<boolean>;
 }

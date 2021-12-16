@@ -29,6 +29,13 @@ export class JsonContentRepresentationComponent extends ContentRepresentationBas
         return JSON.stringify(JSON.parse(this.data.items.find((item) => item.type === ClipboardItemType.textPlain)?.data), null, 2);
     }
 
+    async edit(): Promise<boolean> {
+        this.component.contentEditable = "true";
+        // console.log('edit called');
+        // this.component.querySelector('pre').contentEditable = "true";
+        return true;
+    }
+
     connectedCallback() {
         const preElement = document.createElement('pre');
         preElement.className = 'code';

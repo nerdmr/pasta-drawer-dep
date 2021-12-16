@@ -7,7 +7,6 @@ import { PastaTypeProvider } from "./json-pasta-type.provider";
 export class LinkPastaTypeProvider implements PastaTypeProvider {
     type: PastaType = PastaType.link;
     async isType(value: string): Promise<boolean> {
-        console.log('return checking url', value, this.isValidHttpUrl(value));
         return this.isValidHttpUrl(value);
     }
     async canBeType(value: string): Promise<boolean> {
