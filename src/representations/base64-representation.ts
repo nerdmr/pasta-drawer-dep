@@ -2,7 +2,7 @@ import { GenericRepresentation, GenericRepresentationBase } from "../model/gener
 import { PastaType } from "../model/pasta-type.enum";
 import { ClipboardValue } from "../services/clipboard-value/clipboard-value.service";
 
-export class Base64DecodeRepresentation extends GenericRepresentationBase implements GenericRepresentation {
+export class Base64Representation extends GenericRepresentationBase implements GenericRepresentation {
     name: string = 'Base64';
     private decodedValue: string;
 

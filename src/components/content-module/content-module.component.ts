@@ -131,21 +131,6 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
             }));
     }
 
-    public async edit() {
-        const activeRep = this.activeRepresentation;
-        if (!activeRep)
-            return;
-            
-        await activeRep.edit();
-        activeRep.onchange = (ev: Event) => {
-            console.log('change occurred');
-        }
-    }
-
-    private get activeRepresentation(): ContentRepresentation {
-        return this.component.querySelector('.active .content-representation') as ContentRepresentation;
-    }
-
     public async copy() {
         const activeRepresentation: ContentRepresentation = this.component.querySelector('.active .content-representation') as ContentRepresentation;
         const copyData = await activeRepresentation.copy();
@@ -208,15 +193,6 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
                 this.copy()
             }
         );
-
-        this.addAction(
-            'edit',
-            '<span class="material-icons">content_edit</span>',
-            actionsContainer,
-            async (ev) => {
-                this.edit();
-            }
-        )
     }
 
     private addAction(eventName: string, eventHtml: string, container: HTMLElement, onclick: (ev: MouseEvent) => void) {
