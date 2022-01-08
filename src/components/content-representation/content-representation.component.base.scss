@@ -1,5 +1,4 @@
 @import './../../../styles/variables.scss';
-// @import './../../../styles/fonts.scss';
 
 .component > * {
     padding: $spacer-1;
@@ -12,4 +11,14 @@
 // shared styles
 h1, h2, h3, h4, h5 {
     margin: 0; padding: 0;
+}
+
+a {
+    all: unset;
+
+    cursor: pointer;
+
+    &:hover {
+        color: $color-brand;
+    }
 }

@@ -21,13 +21,17 @@ export class WebpageRepresentationComponent extends GenericRepresentation {
             const linkPreview = await this.linkPreviewService.get(link);
 
             component.innerHTML = `
-                <div class="webpage-preview">
-                    <h3 class="webpage-preview__title">${linkPreview.description}</h3>
-                    <p class="webpage-preview__description">${linkPreview.description}</p>
+                <a class="webpage-preview" href="${link}" target="_blank">
                     ${ (linkPreview.images?.length) ? `
-                    <img src="${linkPreview.images[0]}"/>
-                    ` : `` }                    
-                </div>
+                    <div class="webpage-preview__image-wrapper">
+                        <img class="webpage-preview__image" src="${linkPreview.images[0]}"/>
+                    </div>
+                    ` : `` }
+                    <div class="webpage-preview__details">
+                        <h3 class="webpage-preview__title">${linkPreview.description}</h3>
+                        <p class="webpage-preview__description">${linkPreview.description}</p>
+                    </div>
+                </a>
             `;
 
         } catch (err) {

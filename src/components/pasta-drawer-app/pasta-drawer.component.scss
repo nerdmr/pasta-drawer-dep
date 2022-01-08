@@ -50,9 +50,11 @@ code {
     }
     h1 {
         flex: 1;
-        font-size: 1.6rem;
+        font-size: 2.0rem;
         display: flex;
         align-items: center;
+        font-weight: 600;
+        color: $color-brand;
     }
     img {
         flex: 0;
@@ -60,7 +62,7 @@ code {
         margin-right: $spacer-1;
     }
     &__logo {
-        flex: 0;
+        flex: 1;
         display: flex;
         cursor: pointer;
     }

@@ -1,5 +1,5 @@
 // Installing service worker
-const CACHE_NAME = 'pasta-drawer-v1.1.0';
+const CACHE_NAME = 'pasta-drawer-v1.1.1';
 
 /* Add relative URL of all the static content you want to store in
  * cache storage (this will help us use our app offline)*/
@@ -10,7 +10,7 @@ let resourcesToCache = [
     '/img/192.png',
     '/img/512.png',
     'https://fonts.gstatic.com/s/materialicons/v83/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2',
-    'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Roboto+Mono:wght@300&family=Roboto:ital,wght@0,100;0,300;1,100;1,300&family=Zen+Antique&display=swap'
+    'https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400&family=Roboto+Mono:wght@300;400&family=Rock+3D&family=Shizuru&display=swap'
 ];
 
 self.addEventListener('install', (e) => {

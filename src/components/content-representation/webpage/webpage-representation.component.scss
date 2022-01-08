@@ -1,14 +1,29 @@
+@import '../../styles/variables.scss';
+
 .webpage-preview {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     
-    &__title {
-        font-size:10rem;
-    }
-    &__description {
-
+    &__image-wrapper {
+        flex: 0;
+        min-width: 100px;
+        margin-right: $spacer-1;
     }
     &__image {
         max-width: 100%;
     }
+
+    &__details {
+        flex: 1;
+    }
+
+    &__title {
+        
+    }
+
+    &__description {
+
+    }
+
+    
 }
