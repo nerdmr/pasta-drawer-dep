@@ -1,8 +1,8 @@
-import { GenericRepresentation, GenericRepresentationBase } from "../model/generic-representation.interface";
+import { GenericRepresentation } from "../model/generic-representation.interface";
 import { PastaType } from "../model/pasta-type.enum";
 import { ClipboardValue } from "../services/clipboard-value/clipboard-value.service";
 
-export class Base64Representation extends GenericRepresentationBase implements GenericRepresentation {
+export class Base64Representation extends GenericRepresentation {
     name: string = 'Base64';
     private decodedValue: string;
 
@@ -15,9 +15,6 @@ export class Base64Representation extends GenericRepresentationBase implements G
 
     async canRender(data: ClipboardValue): Promise<boolean> {
 
-        if (data.pastaTypes.indexOf(PastaType.base64) !== -1)
-            return true;
-
         this.decodedValue = this.getDecodedValue(data);
 
         if (this.decodedValue) {
@@ -26,7 +23,8 @@ export class Base64Representation extends GenericRepresentationBase implements G
 
         return false;
     }
-    render(component: HTMLElement, data: ClipboardValue): void {
+
+    async render(component: HTMLElement, data: ClipboardValue): Promise<void> {
         if (!this.decodedValue) {
             this.decodedValue = this.getDecodedValue(data);
         }

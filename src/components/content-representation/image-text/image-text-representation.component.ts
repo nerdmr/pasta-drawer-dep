@@ -64,7 +64,7 @@ export class ImageTextRepresentationComponent extends ContentRepresentationBase 
 
             formData.append('image', new Blob([data]));
           
-            const url = process.env.OCR_BASE_PATH;
+            const url = (process as any).env.OCR_BASE_PATH;
             const options: RequestInit = {
                 method: 'POST',
                 body: formData

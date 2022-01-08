@@ -13,6 +13,14 @@ import postcss from "postcss";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageJson = require("./package.json");
 
+import dotenv from 'dotenv';
+dotenv.config();
+
+console.log(dotenv.parsed);
+console.log(process.env.LINK_PREVIEW_PATH);
+
+
+
 const globals = {
   ...packageJson.devDependencies,
 };
@@ -48,9 +56,11 @@ export default {
           .then((result) => result.css),
     }),
     replace({
-      "process.env.OCR_BASE_PATH": process.env.OCR_BASE_PATH
-        ? `'${process.env.OCR_BASE_PATH}'`
-        : `'http://localhost:5000'`,
+        "process.env.OCR_BASE_PATH": JSON.stringify(process.env.OCR_BASE_PATH),
+        "process.env.LINK_PREVIEW_PATH": JSON.stringify(process.env.LINK_PREVIEW_PATH),
+    //   "process.env.OCR_BASE_PATH": process.env.OCR_BASE_PATH
+    //     ? `'${process.env.OCR_BASE_PATH}'`
+    //     : `'http://localhost:5000'`,
     }),
     // resolve(),
     // commonjs({

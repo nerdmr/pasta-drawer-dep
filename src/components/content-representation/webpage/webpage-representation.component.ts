@@ -1,54 +1,42 @@
-import { registry } from 'tsyringe';
-import { PastaType } from '../../../model/pasta-type.enum';
+import { GenericRepresentation } from '../../../model/generic-representation.interface';
 import { ClipboardValue } from '../../../services/clipboard-value/clipboard-value.service';
-import { ShadowCssComponentBase } from '../../shadow-sass-base/shadow-sass.component.base';
-import { ContentRepresentation } from '../content-representation';
-import { ContentRepresentationBase } from '../content-representation.component.base';
+import { LinkPreviewService } from '../../../services/link-preview/link-preview.service';
 import * as css from './webpage-representation.component.scss';
 
 const elementName = 'webpage-representation';
 
-@registry([
-    {
-        token: 'ContentRepresentation',
-        useFactory: (c) => {
-            return new WebpageRepresentationComponent(null!)
-        },
-    }
-])
-export class WebpageRepresentationComponent extends ContentRepresentationBase implements ContentRepresentation {
+
+
+export class WebpageRepresentationComponent extends GenericRepresentation {
     name: string = 'Webpage';  // Tab value
     element: string = elementName;
 
-    constructor(public data: ClipboardValue) {
-        super(css);
+    constructor(private linkPreviewService: LinkPreviewService) {
+        super();
     }
 
-    async connectedCallback() {
-        // render it
-        this.loading = true;
-
-
-        // get html
-        const url = this.getRawTextValue(this.data);
-        const options: RequestInit = {
-            method: 'GET'
-        };
-
+    async render(component: HTMLElement, data: ClipboardValue): Promise<void> {
         try {
-            const response = await fetch(url);
-            const responseBody = await response.text();
-            
+            const link = this.getValue(data);
+            const linkPreview = await this.linkPreviewService.get(link);
+
+            component.innerHTML = `
+                <div class="webpage-preview">
+                    <h3 class="webpage-preview__title">${linkPreview.description}</h3>
+                    <p class="webpage-preview__description">${linkPreview.description}</p>
+                    ${ (linkPreview.images?.length) ? `
+                    <img src="${linkPreview.images[0]}"/>
+                    ` : `` }                    
+                </div>
+            `;
 
         } catch (err) {
             console.log('err', err);
         }
+    };
 
-
-        setTimeout(() => {
-            this.loading = false;
-            this.component.innerHTML = `<p>Web link representation not yet enabled, but might be soone.</p>`;
-        }, 3000);
+    css(data: ClipboardValue): string {
+        return css.default;
     }
 
     async copy(): Promise<string> {
@@ -56,11 +44,16 @@ export class WebpageRepresentationComponent extends ContentRepresentationBase im
     }
 
     async canRender(value: ClipboardValue): Promise<boolean> {
-        return value.pastaTypes.indexOf(PastaType.link) > -1;
+        const rawText = this.getValue(value);
+        return this.isValidHttpUrl(rawText);
+    }
 
-        // const rawText = this.getRawTextValue(value);
-        // return this.isValidHttpUrl(rawText);
+    private isValidHttpUrl(potentialUrl: string): boolean {
+        try {
+            const url = new URL(potentialUrl);
+            return url.protocol === "http:" || url.protocol === "https:";
+        } catch (e) {
+            return false;
+        }
     }
 }
-
-customElements.define(elementName, WebpageRepresentationComponent);

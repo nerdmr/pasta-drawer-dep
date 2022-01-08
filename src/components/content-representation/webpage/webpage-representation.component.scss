@@ -1,0 +1,14 @@
+.webpage-preview {
+    display: flex;
+    flex-direction: column;
+    
+    &__title {
+
+    }
+    &__description {
+
+    }
+    &__image {
+        max-width: 100%;
+    }
+}

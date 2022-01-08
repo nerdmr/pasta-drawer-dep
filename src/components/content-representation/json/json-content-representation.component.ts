@@ -39,8 +39,9 @@ export class JsonContentRepresentationComponent extends ContentRepresentationBas
 
     async canRender(value: ClipboardValue): Promise<boolean> {
 
-        if (value.pastaTypes.indexOf(PastaType.json) !== -1)
-            return true;
+
+        // if (value.pastaTypes.indexOf(PastaType.json) !== -1)
+        //     return true;
 
         // by letting it continue, we're letting it be backwards compatible
         if (value.type !== 'text') {

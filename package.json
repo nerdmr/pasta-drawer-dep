@@ -9,7 +9,7 @@
     "serve": "npm run build && http-server ./dist -o",
     "build:dev": "rollup -c",
     "dev": "rollup -c -w",
-    "build": "rollup -c --environment OCR_BASE_PATH:https://pasta-drawer-server-dbhbca3q4a-ew.a.run.app/"
+    "build": "rollup -c"
   },
   "author": "Josh Bruflodt [nerdmr]",
   "license": "ISC",
@@ -19,6 +19,7 @@
     "@rollup/plugin-node-resolve": "^11.2.1",
     "@rollup/plugin-replace": "^2.4.2",
     "autoprefixer": "^10.4.0",
+    "dotenv": "^10.0.0",
     "http-server": "^0.12.3",
     "node-sass": "^6.0.1",
     "postcss": "^8.4.4",

@@ -1,14 +1,12 @@
-import { ClipboardItemKind, ClipboardItemType, ClipboardValue, ClipboardValueService } from "../services/clipboard-value/clipboard-value.service";
+import { ClipboardItemKind, ClipboardItemType, ClipboardValue } from "../services/clipboard-value/clipboard-value.service";
 
-export interface GenericRepresentation {
-    name: string;
-    canRender(data: ClipboardValue): Promise<boolean>;
-    render(component: HTMLElement, data: ClipboardValue): void;
-    css(data: ClipboardValue): string;
-    copy(data: ClipboardValue): Promise<string>;
-}
+export abstract class GenericRepresentation {
+    abstract name: string;
+    abstract canRender(data: ClipboardValue): Promise<boolean>;
+    abstract render(component: HTMLElement, data: ClipboardValue): Promise<void>;
+    abstract css(data: ClipboardValue): string;
+    abstract copy(data: ClipboardValue): Promise<string>;
 
-export class GenericRepresentationBase {
     getValue(clipboardValue: ClipboardValue): string {
         const plainTextValue = clipboardValue.items.find(x => x.type === ClipboardItemType.textPlain);
 
