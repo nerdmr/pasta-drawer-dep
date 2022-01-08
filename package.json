@@ -9,7 +9,7 @@
     "serve": "npm run build && http-server ./dist -o",
     "build:dev": "rollup -c",
     "dev": "rollup -c -w",
-    "build": "rollup -c"
+    "build": "rollup -c --environment PROD:true"
   },
   "author": "Josh Bruflodt [nerdmr]",
   "license": "ISC",
