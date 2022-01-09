@@ -1,23 +1,25 @@
 import { container, singleton } from "tsyringe";
 import { PastaDrawerComponent } from "../components/pasta-drawer-app/pasta-drawer.component";
-import { AppPage } from "../model/app-page.interface";
 import { AppElementsService } from "../services/app-elements/app-elements.service";
 import { ClipboardValue, ClipboardValueService } from "../services/clipboard-value/clipboard-value.service";
-import { DatabaseService } from "../services/database/database.service";
 import { AppKeyboardListenerService } from "../services/app-keyboard-listener/app-keyboard-listener.service";
 import * as helpTextJsonModule from '../json/help-text-module.json';
+import { ClipboardStorageRepository } from "../services/database/clipboard-storage.repository";
+import { ClipboardDbItem } from "../model/clipboard-db-item.interface";
 
 @singleton()
 export class PastaDrawer {
-    private activePage!: AppPage;
-    private pages!: AppPage[];
+    // private activePage!: AppPage;
+    // private pages!: AppPage[];
+
+    private items: ClipboardDbItem[];
 
     /**
      *
      */
     constructor(
         private appElementsService: AppElementsService,
-        private databaseService: DatabaseService,
+        private clipboardStorageRepository: ClipboardStorageRepository,
         private clipboardValueService: ClipboardValueService,
         private appKeyboardListenerService: AppKeyboardListenerService,
     ) {
@@ -26,25 +28,45 @@ export class PastaDrawer {
 
         this.appElementsService.initialize(appComponent);
 
-        this.databaseService.loadPages().then((pages) => {
-            this.pages = pages;
+        this.clipboardStorageRepository.read().then((items) => {
+            this.items = items;
 
-            if (!this.pages || this.pages.length === 0) {
-                this.pages = [
-                    {
-                        name: 'My first page',
-                        modules: []
-                    }
-                ];
-            }
+            // if (!this.pages || this.pages.length === 0) {
+            //     this.pages = [
+            //         {
+            //             name: 'My first page',
+            //             modules: []
+            //         }
+            //     ];
+            // }
     
-            this.activePage = this.pages[0];
-            this.renderPage(this.activePage);
+            // this.activePage = this.pages[0];
+            this.renderPage(this.items);
 
-            if (this.activePage.modules.length === 0) {
+            if (this.items.length === 0) {
                 this.addHelpModule();
             }
         });
+
+        // this.databaseService.loadPages().then((pages) => {
+        //     this.pages = pages;
+
+        //     if (!this.pages || this.pages.length === 0) {
+        //         this.pages = [
+        //             {
+        //                 name: 'My first page',
+        //                 modules: []
+        //             }
+        //         ];
+        //     }
+    
+        //     this.activePage = this.pages[0];
+        //     this.renderPage(this.activePage);
+
+        //     if (this.activePage.modules.length === 0) {
+        //         this.addHelpModule();
+        //     }
+        // });
         
 
         this.listenForPaste();
@@ -62,8 +84,16 @@ export class PastaDrawer {
 
     private listenForModuleEvents() {
         this.appElementsService.pastaDrawerComponent.addEventListener('delete', (ev: any) => {
-            this.activePage.modules.splice(this.activePage.modules.indexOf(ev.detail.data), 1);
-            this.databaseService.savePages(this.pages);
+
+            // find matching item in items
+            const matchingItem = this.items.find(x => x.data === ev.detail.data);
+
+            if (!matchingItem || !matchingItem.id) {
+                throw new Error('Could not find matching element to delete: ' + JSON.stringify(ev.detail.data));
+            }
+
+            // delete the matching item
+            this.clipboardStorageRepository.delete(matchingItem.id);
         });
     }
 
@@ -79,17 +109,24 @@ export class PastaDrawer {
         });
     }
 
-    private insertModule(module: ClipboardValue, insertAtBeginning = false) {
+    private async insertModule(module: ClipboardValue, insertAtBeginning = false) {
         this.appElementsService.pastaDrawerComponent.addContentModule(module, insertAtBeginning);
         
-        this.activePage.modules.unshift(module);
-        this.databaseService.savePages(this.pages);
+        const insertedModule = await this.clipboardStorageRepository.create({
+            data: module,
+            drawer: 'junk'
+        });
+
+        this.items.unshift(insertedModule);
+
+        // this.activePage.modules.unshift(module);
+        // this.databaseService.savePages(this.pages);
     }
 
-    private renderPage(page: AppPage) {
-        for (let i = 0; i < page.modules.length; i++) {
-            const module = page.modules[i];
-            this.appElementsService.pastaDrawerComponent.addContentModule(module);
+    private renderPage(items: ClipboardDbItem[]) {
+        for (let i = 0; i < items.length; i++) {
+            const module = items[i];
+            this.appElementsService.pastaDrawerComponent.addContentModule(module.data);
         }
     }
 }
