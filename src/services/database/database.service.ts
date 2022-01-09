@@ -17,7 +17,12 @@ export interface IHasId {
     id?: string;
 }
 
-export abstract class DatabaseService<T extends IHasId> {
+export interface IHasAudit {
+    created?: Date;
+    modified?: Date;
+}
+
+export abstract class DatabaseService<T extends IHasId & IHasAudit> {
 
     private  dbInitPromise: Promise<void>;
     private db!: IDBDatabase;
@@ -67,7 +72,8 @@ export abstract class DatabaseService<T extends IHasId> {
 
         await this.dbInitPromise;
 
-        item.id = this.generateUUID();
+        item.created = new Date();
+        item.modified = new Date();
 
         let transaction = this.db.transaction([this.tableName], 'readwrite');
         let objectStore = transaction.objectStore(this.tableName);
@@ -77,6 +83,7 @@ export abstract class DatabaseService<T extends IHasId> {
 
         try {
             await this.transaction(transaction);
+            item.id = request.result.toString();
             return item;
         } catch (error) {
             throw error;
@@ -139,6 +146,8 @@ export abstract class DatabaseService<T extends IHasId> {
         
         await this.dbInitPromise;
 
+        item.modified = new Date();
+
         let transaction = this.db.transaction([this.tableName], 'readwrite');
         let objectStore = transaction.objectStore(this.tableName);
 
@@ -169,22 +178,6 @@ export abstract class DatabaseService<T extends IHasId> {
             transaction.onerror = (error) => {
                 reject(error);
             };
-        });
-    }
-
-    private generateUUID(): string { // Public Domain/MIT
-        var d = new Date().getTime();//Timestamp
-        var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random() * 16;//random number between 0 and 16
-            if(d > 0){//Use timestamp until depleted
-                r = (d + r)%16 | 0;
-                d = Math.floor(d/16);
-            } else {//Use microseconds since page-load if supported
-                r = (d2 + r)%16 | 0;
-                d2 = Math.floor(d2/16);
-            }
-            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
         });
     }
 }

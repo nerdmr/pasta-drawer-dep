@@ -1,5 +1,5 @@
 // Installing service worker
-const CACHE_NAME = 'pasta-drawer-v1.1.3';
+const CACHE_NAME = 'pasta-drawer-v1.1.4';
 
 /* Add relative URL of all the static content you want to store in
  * cache storage (this will help us use our app offline)*/
