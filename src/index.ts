@@ -33,6 +33,7 @@ import { GenericRepresentationComponent } from "./components/generic-representat
 import { Base64Representation } from "./representations/base64-representation";
 import { WebpageRepresentationComponent } from "./components/content-representation/webpage/webpage-representation.component"
 import { LinkPreviewService } from "./services/link-preview/link-preview.service";
+import { DrawerNavItemComponent } from "./components/drawer-nav-item/drawer-nav-item.component";
 
 
 
@@ -45,3 +46,4 @@ JsonContentRepresentationComponent;
 ImageContentRepresentationComponent;
 ImageTextRepresentationComponent;
 WebpageRepresentationComponent; // WIP
+DrawerNavItemComponent;

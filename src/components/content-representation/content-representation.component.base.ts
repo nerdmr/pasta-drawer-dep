@@ -1,8 +1,8 @@
 import { ClipboardItemType, ClipboardValue } from "../../services/clipboard-value/clipboard-value.service";
-import { ShadowCssComponentBase } from "../shadow-sass-base/shadow-sass.component.base";
+import { ShadowCssComponentBaseWithLoader } from "../shadow-sass-base/shadow-sass.component.base";
 import * as baseCss from './content-representation.component.base.scss';
 
-export class ContentRepresentationBase extends ShadowCssComponentBase {
+export class ContentRepresentationBase extends ShadowCssComponentBaseWithLoader {
     /**
      *
      */

@@ -27,6 +27,8 @@ export abstract class DatabaseService<T extends IHasId & IHasAudit> {
     private  dbInitPromise: Promise<void>;
     private db!: IDBDatabase;
 
+    private key: string = 'id';
+
     // private dbName: string;
     // private tableName: string;
 
@@ -56,7 +58,7 @@ export abstract class DatabaseService<T extends IHasId & IHasAudit> {
     
                 // Create an objectStore to store our notes in (basically like a single table)
                 // including a auto-incrementing key
-                let objectStore = db.createObjectStore(this.tableName, { keyPath: 'id', autoIncrement: true });
+                let objectStore = db.createObjectStore(this.tableName, { keyPath: this.key, autoIncrement: true });
     
                 // Define what data items the objectStore will contain
                 this.createObjectStoreIndices(objectStore);
@@ -151,7 +153,8 @@ export abstract class DatabaseService<T extends IHasId & IHasAudit> {
         let transaction = this.db.transaction([this.tableName], 'readwrite');
         let objectStore = transaction.objectStore(this.tableName);
 
-        let request = objectStore.put(item, item.id);
+        let request = objectStore.put(item);
+        // objectStore.put()
         request.onsuccess = () => { };
 
         try {

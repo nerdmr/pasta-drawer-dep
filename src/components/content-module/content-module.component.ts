@@ -1,10 +1,12 @@
-import { container } from "tsyringe";
+import { container, injectable } from "tsyringe";
+import { ClipboardDbItem, ClipboardDrawer } from "../../model/clipboard-db-item.interface";
 import { ContentModuleConfiguration } from "../../model/content-module-configuration.interface";
 import { GenericRepresentation } from "../../model/generic-representation.interface";
+import { ClipboardStorageService } from "../../services/clipboard-storage/clipboard-storage.service";
 import { ClipboardValue } from "../../services/clipboard-value/clipboard-value.service";
 import { ContentRepresentation } from "../content-representation/content-representation";
 import { GenericRepresentationComponent } from "../generic-representation/generic-representation.component";
-import { ShadowCssComponentBase } from "../shadow-sass-base/shadow-sass.component.base";
+import { ShadowCssComponentBaseWithLoader } from "../shadow-sass-base/shadow-sass.component.base";
 import * as css from './content-module.component.scss';
 
 interface Represenation {
@@ -13,17 +15,21 @@ interface Represenation {
     representationElement: ContentRepresentation;
 }
 
-export class ContentModuleComponent extends ShadowCssComponentBase {
+@injectable()
+export class ContentModuleComponent extends ShadowCssComponentBaseWithLoader {
     private contentRepresentationComponents: ContentRepresentation[];
     private contentRepresentations: Represenation[] = [];
     private activeRepresentationIndex: number = -1;
+    public data: ClipboardDbItem;
 
     /**
      *
      */
-    constructor(private data: ClipboardValue) {
+    constructor(private clipboardStorageService: ClipboardStorageService) {
         super(css, false);
         this.contentRepresentationComponents = container.resolveAll('ContentRepresentation');
+
+        this.draggable = true;
     }
 
     connectedCallback() {
@@ -62,7 +68,7 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
 
         for (let i = 0; i < this.contentRepresentationComponents.length; i++) {
             const contentRepresentationComponent = this.contentRepresentationComponents[i];
-            if (await contentRepresentationComponent.canRender(this.data)) {
+            if (await contentRepresentationComponent.canRender(this.data.data)) {
                 
                 const type = contentRepresentationComponent.element;
                 
@@ -75,9 +81,9 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
                 let representationElement: ContentRepresentation;
                 if (type === 'generic-representation') {
                     const genericComponent = contentRepresentationComponent as GenericRepresentationComponent;
-                    representationElement = new GenericRepresentationComponent(this.data, genericComponent.newRepresentationInstance());
+                    representationElement = new GenericRepresentationComponent(this.data.data, genericComponent.newRepresentationInstance());
                 } else {
-                    representationElement = this.getElementForType(type, this.data);
+                    representationElement = this.getElementForType(type, this.data.data);
                 }
 
                 representationElement.classList.add('content-representation');
@@ -189,6 +195,15 @@ export class ContentModuleComponent extends ShadowCssComponentBase {
                 this.copy()
             }
         );
+
+        this.addAction(
+            'test',
+            `<span class="material-icons-outlined">adb</span>`,
+            actionsContainer,
+            async (ev) => {
+                this.clipboardStorageService.putInDrawer(this.data, ClipboardDrawer.links);
+            }
+        )
     }
 
     private addAction(eventName: string, eventHtml: string, container: HTMLElement, onclick: (ev: MouseEvent) => void) {

@@ -1,7 +1,7 @@
 import { container, registry } from "tsyringe";
 import { ContentModuleConfiguration } from "../../../model/content-module-configuration.interface";
 import { ClipboardValue } from "../../../services/clipboard-value/clipboard-value.service";
-import { ShadowCssComponentBase } from "../../shadow-sass-base/shadow-sass.component.base";
+import { ShadowCssComponentBaseWithLoader } from "../../shadow-sass-base/shadow-sass.component.base";
 import { ContentRepresentation } from "../content-representation";
 import * as css from './image-content-representation.component.scss'
 
@@ -15,7 +15,7 @@ const elementName = 'content-representation-image';
         },
     }
 ])
-export class ImageContentRepresentationComponent extends ShadowCssComponentBase implements ContentRepresentation {
+export class ImageContentRepresentationComponent extends ShadowCssComponentBaseWithLoader implements ContentRepresentation {
     name: string = '📷 Image';
     element: string = elementName;
 

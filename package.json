@@ -9,7 +9,9 @@
     "serve": "npm run build && http-server ./dist -o",
     "build:dev": "rollup -c",
     "dev": "rollup -c -w",
-    "build": "rollup -c --environment PROD:true"
+    "build": "rollup -c --environment PROD:true",
+
+    "dep:links": "npm run dev --prefix ./dependencies/url-preview"
   },
   "author": "Josh Bruflodt [nerdmr]",
   "license": "ISC",

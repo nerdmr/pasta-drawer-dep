@@ -1,6 +1,6 @@
 import { registry } from 'tsyringe';
 import { ClipboardItemType, ClipboardValue } from '../../../services/clipboard-value/clipboard-value.service';
-import { ShadowCssComponentBase } from '../../shadow-sass-base/shadow-sass.component.base';
+import { ShadowCssComponentBaseWithLoader } from '../../shadow-sass-base/shadow-sass.component.base';
 import { ContentRepresentation } from '../content-representation';
 import * as css from './html-clipboard-representation.component.scss';
 
@@ -22,7 +22,7 @@ const elementName = 'html-clipboard-representation';
         },
     }
 ])
-export class HtmlClipboardRepresentation extends ShadowCssComponentBase implements ContentRepresentation {
+export class HtmlClipboardRepresentation extends ShadowCssComponentBaseWithLoader implements ContentRepresentation {
     name: string = 'Formatted';  // Tab value
     element: string = elementName;
 

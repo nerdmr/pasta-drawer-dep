@@ -30,15 +30,6 @@ export class PastaDrawer {
 
         this.clipboardStorageRepository.read().then((items) => {
             this.items = items;
-
-            // if (!this.pages || this.pages.length === 0) {
-            //     this.pages = [
-            //         {
-            //             name: 'My first page',
-            //             modules: []
-            //         }
-            //     ];
-            // }
     
             // this.activePage = this.pages[0];
             this.renderPage(this.items);
@@ -47,27 +38,6 @@ export class PastaDrawer {
                 this.addHelpModule();
             }
         });
-
-        // this.databaseService.loadPages().then((pages) => {
-        //     this.pages = pages;
-
-        //     if (!this.pages || this.pages.length === 0) {
-        //         this.pages = [
-        //             {
-        //                 name: 'My first page',
-        //                 modules: []
-        //             }
-        //         ];
-        //     }
-    
-        //     this.activePage = this.pages[0];
-        //     this.renderPage(this.activePage);
-
-        //     if (this.activePage.modules.length === 0) {
-        //         this.addHelpModule();
-        //     }
-        // });
-        
 
         this.listenForPaste();
         this.listenForModuleEvents();
@@ -110,12 +80,13 @@ export class PastaDrawer {
     }
 
     private async insertModule(module: ClipboardValue, insertAtBeginning = false) {
-        this.appElementsService.pastaDrawerComponent.addContentModule(module, insertAtBeginning);
         
         const insertedModule = await this.clipboardStorageRepository.create({
             data: module,
             drawer: 'junk'
         });
+
+        this.appElementsService.pastaDrawerComponent.addContentModule(insertedModule, insertAtBeginning);
 
         this.items.unshift(insertedModule);
 
@@ -126,7 +97,7 @@ export class PastaDrawer {
     private renderPage(items: ClipboardDbItem[]) {
         for (let i = 0; i < items.length; i++) {
             const module = items[i];
-            this.appElementsService.pastaDrawerComponent.addContentModule(module.data);
+            this.appElementsService.pastaDrawerComponent.addContentModule(module);
         }
     }
 }

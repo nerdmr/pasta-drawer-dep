@@ -2,7 +2,7 @@ import { container, registry } from "tsyringe";
 import { ContentModuleConfiguration } from "../../../model/content-module-configuration.interface";
 import { PastaType } from "../../../model/pasta-type.enum";
 import { ClipboardItemKind, ClipboardItemType, ClipboardValue } from "../../../services/clipboard-value/clipboard-value.service";
-import { ShadowCssComponentBase } from "../../shadow-sass-base/shadow-sass.component.base";
+import { ShadowCssComponentBaseWithLoader } from "../../shadow-sass-base/shadow-sass.component.base";
 import { ContentRepresentation } from "../content-representation";
 import { ContentRepresentationBase } from "../content-representation.component.base";
 import * as css from './json-content-representation.component.scss'
